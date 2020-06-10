@@ -11,13 +11,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/CableTree/CableTree.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/CableTree/Cavity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/CableTree/Housing.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/CableTree/Palette.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/CableTree/Position.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/CableTree/Wire.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Input/XMLParser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Controllers/MainFrameController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/MainFrame.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/MainGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sample/StatisticsFrame.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CPVisualizationTool/sample/Controller.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CPVisualizationTool/sample/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CPVisualizationTool/sample/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/CPVisualizationTool/sample/sample.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/CPVisualizationTool/sample/sample.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/Controller.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,8 +109,12 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="recentsLimit" value="5" />
+    <property name="settings.editor.selected.configurable" value="preferences.JavaFX" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Lukas Schaller\Documents\CPVisualizationTool\src\sample" />
+    </key>
     <key name="CreateClassDialog.RecentsKey">
       <recent name="CableTree" />
     </key>
@@ -143,7 +151,7 @@
       <option name="VM_PARAMETERS" value="--module-path &quot;C:\javafx-sdk-14.0.1\lib&quot; --add-modules javafx.controls,javafx.fxml" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sample.*" />
+          <option name="PATTERN" value="Controllers.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -218,6 +226,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
@@ -228,33 +237,33 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591769835818" />
-    <state x="765" y="221" key="#com.intellij.ide.util.MemberChooser" timestamp="1591770700649">
+    <state x="765" y="221" key="#com.intellij.ide.util.MemberChooser" timestamp="1591809601875">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="765" y="221" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591770700649" />
-    <state x="666" y="261" key="FileChooserDialogImpl" timestamp="1591769709945">
+    <state x="765" y="221" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591809601875" />
+    <state x="666" y="261" key="FileChooserDialogImpl" timestamp="1591781256320">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="666" y="261" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591769709945" />
-    <state width="1877" height="322" key="GridCell.Tab.0.bottom" timestamp="1591777510883">
+    <state x="666" y="261" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591781256320" />
+    <state width="1877" height="288" key="GridCell.Tab.0.bottom" timestamp="1591810175854">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="322" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591777510883" />
-    <state width="1877" height="322" key="GridCell.Tab.0.center" timestamp="1591777510883">
+    <state width="1877" height="288" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591810175854" />
+    <state width="1877" height="288" key="GridCell.Tab.0.center" timestamp="1591810175854">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="322" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591777510883" />
-    <state width="1877" height="322" key="GridCell.Tab.0.left" timestamp="1591777510883">
+    <state width="1877" height="288" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591810175854" />
+    <state width="1877" height="288" key="GridCell.Tab.0.left" timestamp="1591810175853">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="322" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591777510883" />
-    <state width="1877" height="322" key="GridCell.Tab.0.right" timestamp="1591777510883">
+    <state width="1877" height="288" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591810175853" />
+    <state width="1877" height="288" key="GridCell.Tab.0.right" timestamp="1591810175854">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="322" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591777510883" />
-    <state x="440" y="94" key="SettingsEditor" timestamp="1591769731459">
+    <state width="1877" height="288" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591810175854" />
+    <state x="440" y="94" key="SettingsEditor" timestamp="1591781257850">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591769731459" />
+    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040/1920.0.1440.860@0.0.1920.1040" timestamp="1591781257850" />
   </component>
 </project>
