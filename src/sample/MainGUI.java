@@ -7,9 +7,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class MainGUI extends Application {
+
+    public static Stage MainStage;
 
     @Override
     public void init() throws Exception {
@@ -29,7 +33,7 @@ public class MainGUI extends Application {
         stage.setTitle("Conflict Visualization");
         stage.setResizable(true);
         stage.show();
-
+        MainStage = stage;
 
     }
 }

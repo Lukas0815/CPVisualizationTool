@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.PropertiesController">
+   <center>
+      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label alignment="TOP_CENTER" text="Blocking cable" textAlignment="CENTER">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="alpha = ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Spinner fx:id="bLockingAlphaSpin" accessibleText="25" editable="true" prefHeight="20.0" prefWidth="80.0" />
+                        <Label layoutX="54.0" layoutY="50.0" text=" h_b = ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Spinner fx:id="blockingHBSpin" editable="true" layoutX="86.0" layoutY="48.0" prefHeight="20.0" prefWidth="80.0" />
+                     </children>
+                  </HBox>
+               </children>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+               <children>
+                  <Label alignment="TOP_CENTER" text="Diagonally close" textAlignment="CENTER">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="v = ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Spinner fx:id="diagonalVSpin" accessibleText="25" editable="true" prefHeight="20.0" prefWidth="80.0" />
+                        <Label layoutX="54.0" layoutY="50.0" text="h_d = ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Spinner fx:id="diagonalHDSpin" editable="true" layoutX="86.0" layoutY="48.0" prefHeight="20.0" prefWidth="80.0" />
+                     </children>
+                  </HBox>
+               </children>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </VBox>
+            <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="144.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+               <children>
+                  <Label alignment="TOP_CENTER" text="Short one-sided" textAlignment="CENTER">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="alpha = ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Spinner fx:id="ShortAlphaSpin" accessibleText="25" editable="true" prefHeight="20.0" prefWidth="80.0" />
+                        <Label layoutX="54.0" layoutY="50.0" text="l = ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Spinner fx:id="DiagonalLSpin" editable="true" layoutX="86.0" layoutY="48.0" prefHeight="20.0" prefWidth="80.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+               <children>
+                  <Label text="Critical Distance">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="54.0" layoutY="50.0" text="d = ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Spinner fx:id="CriticalDSpin" editable="true" layoutX="86.0" layoutY="48.0" prefHeight="20.0" prefWidth="80.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" layoutX="310.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label text="Chamber Triplet">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="54.0" layoutY="50.0" text="h_c = ">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Spinner fx:id="ChamberHCSpin" editable="true" layoutX="86.0" layoutY="48.0" prefHeight="20.0" prefWidth="80.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+   </center>
+   <top>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" text="Customize Constraint Parameters" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="25.0" />
+         </font>
+         <padding>
+            <Insets bottom="30.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
+      </Label>
+   </top>
+   <bottom>
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <buttons>
+          <Button alignment="CENTER" mnemonicParsing="false" text="save" />
+            <Button layoutX="535.0" layoutY="18.0" mnemonicParsing="false" text="discard" />
+            <Button layoutX="535.0" layoutY="18.0" mnemonicParsing="false" text="default" />
+        </buttons>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="150.0" right="170.0" />
+         </BorderPane.margin>
+      </ButtonBar>
+   </bottom>
+</BorderPane>

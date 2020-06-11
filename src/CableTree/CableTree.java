@@ -1,5 +1,8 @@
 package CableTree;
 
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+
 import java.util.List;
 
 /*
@@ -18,5 +21,19 @@ public class CableTree {
         this.palette = palette;
         this.housings = housings;
         this.cavities = cavities;
+    }
+
+    public void drawToPanel(Pane drawPane) {
+        //Draw the pallet first
+        palette.draw(drawPane);
+
+        //Draw housings
+        for (Housing h : housings){
+            h.draw(drawPane);
+        }
+
+        for (Cavity c : cavities){
+            c.draw(drawPane);
+        }
     }
 }

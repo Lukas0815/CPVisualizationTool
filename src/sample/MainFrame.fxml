@@ -26,12 +26,14 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+                  <MenuItem fx:id="menuItemLoadXML" mnemonicParsing="false" onAction="#FileLoadXML" text="Load XML" />
+                  <MenuItem fx:id="editProperties" mnemonicParsing="false" onAction="#loadPropertyStage" text="Edit Properties" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" onAction="#reloadCanvas" text="Reload" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -151,7 +153,7 @@
       </TabPane>
    </right>
    <center>
-      <ScrollPane BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="ScrollPane" BorderPane.alignment="CENTER">
         <content>
           <AnchorPane fx:id="drawPane" />
         </content>

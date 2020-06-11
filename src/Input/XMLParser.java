@@ -17,6 +17,8 @@ import java.util.List;
 /* Tutorial followed for dom parser: https://mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/  */
 public class XMLParser {
 
+    public static int scale = 6;
+
     private String xmlpath;
     private File fXmlFile;
     private  DocumentBuilderFactory dbFactory;
@@ -65,7 +67,7 @@ public class XMLParser {
             double width = Double.parseDouble(eElement.getElementsByTagName("Width").item(0).getTextContent());
             double height = Double.parseDouble(eElement.getElementsByTagName("Height").item(0).getTextContent());
 
-            return new Palette(name, x, y, width, height);
+            return new Palette(name, x * scale, y *scale, width*scale, height*scale);
         }
 
         return null;
@@ -91,14 +93,35 @@ public class XMLParser {
                 String type = eElement.getElementsByTagName("Type").item(0).getTextContent();
                 double x = Double.parseDouble(eElement.getElementsByTagName("X").item(0).getTextContent());
                 double y = Double.parseDouble(eElement.getElementsByTagName("Z").item(0).getTextContent());
+                y = y < 0 ? -y : y;
                 double width = Double.parseDouble(eElement.getElementsByTagName("Width").item(0).getTextContent());
                 double height = Double.parseDouble(eElement.getElementsByTagName("Height").item(0).getTextContent());
-                //int angle = Integer.parseInt(eElement.getElementsByTagName("Angle").item(0).getTextContent());
+
+                //Extract correct height and width from Housing type since in Housings both are set to 0
+                NodeList typeList = doc.getElementsByTagName("HousingType");
+                for(int j=0; j<typeList.getLength(); j++){
+                    Node nHousingType = typeList.item(j);
+
+                    if(nHousingType.getNodeType() == Node.ELEMENT_NODE){
+                        Element eHousingType = (Element) nHousingType;
+
+                        String typeName = eHousingType.getAttribute("name");
+                        if (typeName.equals(type)){
+                            width = Double.parseDouble(eHousingType.getElementsByTagName("Width").item(0).getTextContent());
+                            height = Double.parseDouble(eHousingType.getElementsByTagName("Height").item(0).getTextContent());
+                            System.out.println("Setting correct values! width: " + width + " height: " + height);
+                            break;
+                        }
+                    }
+                }
+
+
+                int angle = Integer.parseInt(eElement.getElementsByTagName("Angle").item(0).getTextContent());
 
                 //get cavities of housing
                 cavities = parseCavities(eElement);
 
-                housings.add(new Housing(name, type, x, y, width, height, cavities));
+                housings.add(new Housing(name, type, x*scale, y*scale, width*scale, height*scale, cavities, angle));
             } else {
                 //Could not pass correctly, so break (Will return null)
                 System.out.println("Could not parse Node as Element in Housings at position " +  i);
@@ -123,11 +146,12 @@ public class XMLParser {
                 //String type = eElement.getElementsByTagName("Type").item(0).getTextContent();
                 double x = Double.parseDouble(eElement.getElementsByTagName("X").item(0).getTextContent());
                 double y = Double.parseDouble(eElement.getElementsByTagName("Z").item(0).getTextContent());
+                y = y < 0 ? -y : y;
                 double width = Double.parseDouble(eElement.getElementsByTagName("Width").item(0).getTextContent());
                 double height = Double.parseDouble(eElement.getElementsByTagName("Height").item(0).getTextContent());
                 int angle = Integer.parseInt(eElement.getElementsByTagName("Angle").item(0).getTextContent());
 
-                cavities.add(new Cavity(name, x, y, width, height, angle));
+                cavities.add(new Cavity(name, x*scale, y*scale, width*scale, height*scale, angle));
             }else{
                 return null;
             }
