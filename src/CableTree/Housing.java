@@ -50,6 +50,18 @@ public class Housing {
         return cavities;
     }
 
+    public Cavity getCavity(String name){
+
+        //TODO: looping through is not optimal
+        for (Cavity c : cavities){
+            if(c.getName().equals(name)){
+                return c;
+            }
+        }
+
+        return null;
+    }
+
     public void draw(Pane drawPane) {
         Rectangle rec = new Rectangle(pos.getX(), pos.getY(), this.width, this.height);
         rec.setFill(Color.RED);
@@ -57,8 +69,7 @@ public class Housing {
         rec.getTransforms().add(new Rotate(angle, pos.getX(), pos.getY()));
         if (angle != 0)
             rec.setX(pos.getX()-height);
-        System.out.println("Angle: " + this.angle);
-        System.out.println("Drawing rec: x: " + pos.getX() + " y: " + pos.getY() + " width: " + width + " height: " + height);
+
         drawPane.getChildren().add(rec);
     }
 }

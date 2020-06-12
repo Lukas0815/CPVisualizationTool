@@ -133,8 +133,8 @@
                               <TreeView layoutX="10.0" layoutY="124.0" prefHeight="200.0" prefWidth="200.0" />
                               <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
                                 <buttons>
-                                  <Button mnemonicParsing="false" text="Show statistics" />
-                                    <Button layoutX="316.0" layoutY="18.0" mnemonicParsing="false" text="Animate" />
+                                  <Button mnemonicParsing="false" onAction="#showStatisticsStage" text="Show statistics" />
+                                    <Button layoutX="316.0" layoutY="18.0" mnemonicParsing="false" onAction="#showAnimationStage" text="Animate" />
                                 </buttons>
                                  <VBox.margin>
                                     <Insets left="80.0" right="80.0" top="30.0" />

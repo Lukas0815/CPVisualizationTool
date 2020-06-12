@@ -10,6 +10,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,8 +25,10 @@ public class XMLParser {
     private  DocumentBuilderFactory dbFactory;
     private DocumentBuilder dBuilder;
     private Document doc;
+    private HashMap<String, Housing> housingMap;
 
     public XMLParser(String path){
+        this.housingMap = new HashMap<String, Housing>();
         this.xmlpath = path;
         this.fXmlFile = new File(path);
         this.dbFactory = DocumentBuilderFactory.newInstance();
@@ -46,10 +49,15 @@ public class XMLParser {
 
         Palette palette = parsePalette();
         List<Housing> housings = parseHousings();
-        List<Cavity> cavities = parseCavities(doc.getDocumentElement());
+        List<Cavity> cavities = new LinkedList<Cavity>();
+
+        for (Housing h : housings){
+            cavities.addAll(h.getCavities());
+        }
+        List<Wire> wires = parseCables();
         //TODO: error handling if null is returned!
 
-        return new CableTree(palette, housings, cavities);
+        return new CableTree(palette, housings, cavities, wires);
     }
 
     /*
@@ -109,7 +117,6 @@ public class XMLParser {
                         if (typeName.equals(type)){
                             width = Double.parseDouble(eHousingType.getElementsByTagName("Width").item(0).getTextContent());
                             height = Double.parseDouble(eHousingType.getElementsByTagName("Height").item(0).getTextContent());
-                            System.out.println("Setting correct values! width: " + width + " height: " + height);
                             break;
                         }
                     }
@@ -120,8 +127,10 @@ public class XMLParser {
 
                 //get cavities of housing
                 cavities = parseCavities(eElement);
+                Housing h = new Housing(name, type, x*scale, y*scale, width*scale, height*scale, cavities, angle);
 
-                housings.add(new Housing(name, type, x*scale, y*scale, width*scale, height*scale, cavities, angle));
+                housings.add(h);
+                housingMap.put(name, h);
             } else {
                 //Could not pass correctly, so break (Will return null)
                 System.out.println("Could not parse Node as Element in Housings at position " +  i);
@@ -158,5 +167,49 @@ public class XMLParser {
         }
 
         return cavities;
+    }
+
+    private List<Wire> parseCables(){
+        List<Wire> wireList = new LinkedList<Wire>();
+        NodeList nLeadSets = doc.getElementsByTagName("LeadSet");
+
+        for (int i=0; i<nLeadSets.getLength(); i++){
+           try{
+               Node nNode = nLeadSets.item(i);
+
+               if(nNode.getNodeType() == Node.ELEMENT_NODE){
+                   Element eElement = (Element) nNode;
+
+                   Element beginning = (Element) eElement.getChildNodes().item(0);
+                   String startHousingName = beginning.getElementsByTagName("Housing").item(0).getTextContent();
+                   String startCavityName = beginning.getElementsByTagName("Cavity").item(0).getTextContent();
+                   Cavity startCavity = this.housingMap.get(startHousingName).getCavity(startCavityName);
+
+                   Element ending = (Element) eElement.getChildNodes().item(1);
+                   String endHousingName = ending.getElementsByTagName("Housing").item(0).getTextContent();
+                   String endCavityName = ending.getElementsByTagName("Cavity").item(0).getTextContent();
+                   Cavity endCavity = this.housingMap.get(endHousingName).getCavity(endCavityName);
+
+                   int length = Integer.parseInt(eElement.getElementsByTagName("Length").item(0).getTextContent());
+                   String type = eElement.getElementsByTagName("Type").item(0).getTextContent();
+
+                   if(startCavity == null || endCavity == null){
+                       System.out.println("ERROR: could not get cavity for wire!");
+                       continue;
+                   }
+                    startCavity.setActive(true);
+                    endCavity.setActive(true);
+                    Wire w = new Wire(length, type, startCavity, endCavity);
+                    wireList.add(w);
+                }
+
+
+           } catch (Exception e){
+               System.out.println("ERROR: could not create wire!");
+               continue;
+           }
+        }
+
+        return wireList;
     }
 }

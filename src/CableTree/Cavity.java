@@ -13,6 +13,7 @@ public class Cavity {
     private Position pos;
     private double width, height;
     private int angle;
+    private boolean active;
 
     public Cavity(String name, double x, double y, double width, double height, int angle){
         this.name = name;
@@ -20,6 +21,7 @@ public class Cavity {
         this.width = width;
         this.height = height;
         this.angle = angle/60; //Arcminutes to degree
+        this.active = false;
     }
 
     public Position getPos() {
@@ -38,6 +40,18 @@ public class Cavity {
         return angle;
     }
 
+    public void setActive(boolean isActive){
+        this.active = isActive;
+    }
+
+    public boolean getActive(){
+        return this.active;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public void draw(Pane drawPane) {
         Rectangle rec = new Rectangle(pos.getX(), pos.getY(), this.width, this.height);
         Text cavityName = new Text(this.name);
@@ -45,10 +59,20 @@ public class Cavity {
         cavityName.setFont(new Font(fontsize));
         cavityName.setX(pos.getX() + width/4);
         cavityName.setY(pos.getY() + height - fontsize/2);
+
         rec.setFill(Color.GRAY);
         rec.setStroke(Color.BLACK);
-        rec.setOpacity(1);
-        System.out.println("Drawing cavity! at pos: " + pos + " width: " +  width + " height: " + height);
+        if(active){
+            rec.setOpacity(1);
+        } else {
+            rec.setOpacity(0.3);
+        }
+
         drawPane.getChildren().addAll(rec, cavityName);
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

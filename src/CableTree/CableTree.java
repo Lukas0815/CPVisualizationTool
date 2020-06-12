@@ -15,12 +15,14 @@ public class CableTree {
 
     private List<Housing> housings;
     private List<Cavity> cavities;
+    private List<Wire> wires;
     private Palette palette;
 
-    public CableTree(Palette palette, List<Housing> housings, List<Cavity> cavities){
+    public CableTree(Palette palette, List<Housing> housings, List<Cavity> cavities, List<Wire> wires){
         this.palette = palette;
         this.housings = housings;
         this.cavities = cavities;
+        this.wires = wires;
     }
 
     public void drawToPanel(Pane drawPane) {

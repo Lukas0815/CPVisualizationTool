@@ -97,4 +97,27 @@ public class MainFrameController {
         //Now draw the tree to the panel
         cableTree.drawToPanel(drawPane);
     }
+
+    public void showStatisticsStage(ActionEvent actionEvent) {
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("../sample/StatisticsFrame.fxml"));
+            Scene pScene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Statistics");
+            stage.setScene(pScene);
+
+            //user can only interact with properties window if opened
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(MainGUI.MainStage);
+
+            stage.show();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void showAnimationStage(ActionEvent actionEvent) {
+        //TODO
+    }
 }
