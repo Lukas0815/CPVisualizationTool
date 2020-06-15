@@ -1,5 +1,6 @@
 package CableTree;
 
+import Input.ColorScheme;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
@@ -20,12 +21,14 @@ public class CableTree {
     private List<Wire> wires;
     private Palette palette;
     private List<Shape> heats;
+    private ColorScheme colorScheme;
 
     public CableTree(Palette palette, List<Housing> housings, List<Cavity> cavities, List<Wire> wires){
         this.palette = palette;
         this.housings = housings;
         this.cavities = cavities;
         this.wires = wires;
+        this.colorScheme = new ColorScheme();
     }
 
     public void drawToPanel(Pane drawPane) {
@@ -50,9 +53,9 @@ public class CableTree {
         for (Cavity c : cavities){
             if (!c.getActive()) continue; //TODO: Eigentlich ist das ja unnötig, sollte nicht alles angezeigt werden?
 
-            //heats.add(c.drawBlocking(palette));
-            //heats.add(c.drawDiagonallyClose());
-            heats.add(c.drawShortOneSided(palette));
+            heats.add(c.drawBlocking(palette, colorScheme));
+            heats.add(c.drawDiagonallyClose(palette, colorScheme));
+            //heats.add(c.drawShortOneSided(palette, colorScheme));
         }
     }
 
@@ -65,5 +68,7 @@ public class CableTree {
         drawPane.getChildren().removeAll(this.heats);
     }
 
-
+    public ColorScheme getColorScheme() {
+        return colorScheme;
+    }
 }

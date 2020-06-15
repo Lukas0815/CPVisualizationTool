@@ -1,5 +1,6 @@
 package CableTree;
 
+import Input.ColorScheme;
 import Input.Parameters;
 import Input.XMLParser;
 import javafx.scene.layout.Pane;
@@ -82,7 +83,7 @@ public class Cavity {
         return this.name;
     }
 
-    public Shape drawBlocking(Palette p) {
+    public Shape drawBlocking(Palette p, ColorScheme colorScheme) {
         //We will use a polygon to show the affected area by the blocking constraint
         Polygon blockArea = new Polygon();
         double x = pos.getX() + width /2;
@@ -100,13 +101,13 @@ public class Cavity {
                 h_alpha, h, //not true, needs calculation with angle
         });
 
-        blockArea.setOpacity(0.3);
-        blockArea.setFill(Color.GRAY);
+        blockArea.setOpacity(colorScheme.getHeatOpacity());
+        blockArea.setFill(colorScheme.getBlockingColor());
 
         return blockArea;
     }
 
-    public Shape drawDiagonallyClose(){
+    public Shape drawDiagonallyClose(Palette p, ColorScheme colorScheme){
         Rectangle rec = new Rectangle();
         double x = this.pos.getX()+width/2;
         double y = this.pos.getY()+height/2;
@@ -117,10 +118,13 @@ public class Cavity {
         rec.setWidth(2 *h);
         rec.setHeight(v);
 
+        rec.setFill(colorScheme.getDiagonalColor());
+        rec.setOpacity(colorScheme.getHeatOpacity());
+
         return rec;
     }
 
-    public Shape drawShortOneSided(Palette p){
+    public Shape drawShortOneSided(Palette p, ColorScheme colorScheme){
 
         //We will use a polygon to show the affected area
         Polygon area = new Polygon();
@@ -139,7 +143,7 @@ public class Cavity {
 
         System.out.println(area.getPoints());
 
-        area.setFill(Color.BLACK);
+        area.setFill(colorScheme.getShortColor());
         area.setOpacity(1);
         return area;
     }

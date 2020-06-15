@@ -49,6 +49,7 @@ public class MainFrameController {
     @FXML
     public void initialize(){
 
+
     }
 
     public void addClicked(MouseEvent mouseEvent) {
@@ -74,6 +75,9 @@ public class MainFrameController {
         drawPane.getChildren().clear();
         //Now draw the tree to the panel
         cableTree.drawToPanel(drawPane);
+
+        //Match default displayed visualization options to parameters given (e.g. color scheme)
+        heatOpacitySlider.setValue(cableTree.getColorScheme().getHeatOpacity() * 100);
     }
 
     public void loadPropertyStage(ActionEvent actionEvent) {
@@ -100,6 +104,9 @@ public class MainFrameController {
         drawPane.getChildren().clear();
         //Now draw the tree to the panel
         cableTree.drawToPanel(drawPane);
+
+        //draw anything else based on chosen options
+        if (heatmapOption.isSelected()) cableTree.drawHeatMap(drawPane);
     }
 
     public void showStatisticsStage(ActionEvent actionEvent) {
@@ -139,25 +146,43 @@ public class MainFrameController {
     public void chooseBlockingColor(ActionEvent actionEvent) {
         //Retrieve the chosen color value
         Color color = this.blockingColorPicker.getValue();
+        cableTree.getColorScheme().setBlockingColor(color);
+        reloadCanvas(actionEvent);
     }
 
     public void chooseDiagonalColor(ActionEvent actionEvent) {
+        Color color = this.diagonalColorPicker.getValue();
+        cableTree.getColorScheme().setDiagonalColor(color);
+        reloadCanvas(actionEvent);
     }
 
     public void chooseShortColor(ActionEvent actionEvent) {
+        Color color = this.shortColorPicker.getValue();
+        cableTree.getColorScheme().setShortColor(color);
+        reloadCanvas(actionEvent);
     }
 
     public void chooseCriticalColor(ActionEvent actionEvent) {
+        Color color = this.criticalColorPicker.getValue();
+        cableTree.getColorScheme().setCriticalColor(color);
+        reloadCanvas(actionEvent);
     }
 
     public void chooseDirectColor(ActionEvent actionEvent) {
+        Color color = this.directColorPicker.getValue();
+        cableTree.getColorScheme().setDirectColor(color);
+        reloadCanvas(actionEvent);
     }
 
     public void chooseChamberColor(ActionEvent actionEvent) {
+        Color color = this.chamberColorPicker.getValue();
+        cableTree.getColorScheme().setChamberColor(color);
+        reloadCanvas(actionEvent);
     }
 
     public void chooseHeatOpacity(MouseEvent mouseEvent) {
         double opacity = heatOpacitySlider.getValue() / 100;
-        System.out.println("New Opacity: " + opacity);
+        cableTree.getColorScheme().setHeatOpacity(opacity);
+        reloadCanvas(null);
     }
 }
