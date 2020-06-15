@@ -18,4 +18,16 @@ public class Wire {
     public String toString() {
         return "Wire: <" + cavities[0] + "," + cavities[1] + ">";
     }
+
+    public int getLength() {
+        return length;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Cavity[] getCavities() {
+        return cavities;
+    }
 }

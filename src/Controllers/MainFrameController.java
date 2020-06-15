@@ -1,6 +1,7 @@
 package Controllers;
 
 import CableTree.CableTree;
+import Input.ColorScheme;
 import Input.XMLParser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,17 +33,20 @@ public class MainFrameController {
     @FXML
     private Button addButton;
     @FXML
-    private MenuItem loadXML;
+    private MenuItem loadXML, loadColorSchemes;
     @FXML
     private CheckBox heatmapOption;
     @FXML
     private ColorPicker blockingColorPicker, diagonalColorPicker, shortColorPicker, criticalColorPicker, directColorPicker, chamberColorPicker;
     @FXML
     private Slider heatOpacitySlider;
+    @FXML
+    private CheckBox blockingDrawCheck, diagonalDrawCheck, shortDrawCheck, criticalDrawCheck, directSuccDrawCheck, chamberDrawCheck;
 
     private CableTree cableTree;
 
     public MainFrameController(){
+
     }
 
     //Gets called at the beginning. Could be used to load in some graphics on the canvas.
@@ -76,8 +80,19 @@ public class MainFrameController {
         //Now draw the tree to the panel
         cableTree.drawToPanel(drawPane);
 
+        adaptGUIColorScheme();
+    }
+
+    private void adaptGUIColorScheme(){
         //Match default displayed visualization options to parameters given (e.g. color scheme)
         heatOpacitySlider.setValue(cableTree.getColorScheme().getHeatOpacity() * 100);
+        ColorScheme c = cableTree.getColorScheme();
+        this.blockingColorPicker.setValue(c.getBlockingColor());
+        this.diagonalColorPicker.setValue(c.getDiagonalColor());
+        this.shortColorPicker.setValue(c.getShortColor());
+        this.criticalColorPicker.setValue(c.getCriticalColor());
+        this.directColorPicker.setValue(c.getDirectColor());
+        this.chamberColorPicker.setValue(c.getChamberColor());
     }
 
     public void loadPropertyStage(ActionEvent actionEvent) {
@@ -100,6 +115,8 @@ public class MainFrameController {
     }
 
     public void reloadCanvas(ActionEvent actionEvent) {
+        if (drawPane == null || cableTree == null) return;
+
         //Clear previous drawings
         drawPane.getChildren().clear();
         //Now draw the tree to the panel
@@ -184,5 +201,85 @@ public class MainFrameController {
         double opacity = heatOpacitySlider.getValue() / 100;
         cableTree.getColorScheme().setHeatOpacity(opacity);
         reloadCanvas(null);
+    }
+
+    public void toggleDrawBlocking(ActionEvent actionEvent) {
+        if (blockingDrawCheck.isSelected()){
+            cableTree.setHeatmapPrintFlag(0, true);
+        } else {
+            cableTree.setHeatmapPrintFlag(0, false);
+        }
+
+        cableTree.drawHeatMap(drawPane);
+    }
+
+    public void toggleDrawChamber(ActionEvent actionEvent) {
+        if (chamberDrawCheck.isSelected()){
+           this.cableTree.setHeatmapPrintFlag(3, true);
+        } else {
+            this.cableTree.setHeatmapPrintFlag(3, false);
+        }
+        cableTree.drawHeatMap(drawPane);
+
+    }
+
+    public void toggleDrawDirectSucc(ActionEvent actionEvent) {
+        if (directSuccDrawCheck.isSelected()){
+            this.cableTree.setHeatmapPrintFlag(5, true);
+        } else {
+            this.cableTree.setHeatmapPrintFlag(5, false);
+        }
+
+        cableTree.drawHeatMap(drawPane);
+    }
+
+    public void toggleDrawCritical(ActionEvent actionEvent) {
+        if (criticalDrawCheck.isSelected()){
+            this.cableTree.setHeatmapPrintFlag(4, true);
+        } else {
+            this.cableTree.setHeatmapPrintFlag(4, false);
+        }
+
+        cableTree.drawHeatMap(drawPane);
+    }
+
+    public void toggleDrawShort(ActionEvent actionEvent) {
+        if (shortDrawCheck.isSelected()){
+           this.cableTree.setHeatmapPrintFlag(2, true);
+        } else {
+            this.cableTree.setHeatmapPrintFlag(2, false);
+        }
+
+        cableTree.drawHeatMap(drawPane);
+    }
+
+    public void toggleDrawDiagonal(ActionEvent actionEvent) {
+        if (diagonalDrawCheck.isSelected()){
+            this.cableTree.setHeatmapPrintFlag(1, true);
+        } else {
+            this.cableTree.setHeatmapPrintFlag(1, false);
+        }
+
+        cableTree.drawHeatMap(drawPane);
+    }
+
+    /*
+    Opens File browser to let user select a predefined color scheme
+    TODO: open new stage where one could choose or even make own color scheme easily
+    */
+    public void loadColorScheme(ActionEvent actionEvent) {
+        final FileChooser fc = new FileChooser();
+        fc.setTitle("Open a settings file");
+        fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Color schemes (*.cpcs)", "*.cpcs", "*.xml"));
+        File file = fc.showOpenDialog(MainGUI.MainStage);
+
+        try {
+            cableTree.getColorScheme().loadScheme(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        reloadCanvas(actionEvent);
+        adaptGUIColorScheme();
     }
 }

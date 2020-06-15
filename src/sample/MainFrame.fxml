@@ -31,6 +31,7 @@
             <items>
                   <MenuItem fx:id="menuItemLoadXML" mnemonicParsing="false" onAction="#FileLoadXML" text="Load XML" />
                   <MenuItem fx:id="editProperties" mnemonicParsing="false" onAction="#loadPropertyStage" text="Edit Properties" />
+                <MenuItem fx:id="menuColorSchemes" mnemonicParsing="false" onAction="#loadColorScheme" text="Color schemes" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
@@ -139,37 +140,37 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                                        <children>
-                                          <CheckBox contentDisplay="CENTER" mnemonicParsing="false" text="Blocking Cable" />
+                                          <CheckBox contentDisplay="CENTER" mnemonicParsing="false" text="Blocking Cable" fx:id="blockingDrawCheck" onAction="#toggleDrawBlocking" />
                                           <ColorPicker fx:id="blockingColorPicker" onAction="#chooseBlockingColor" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                                        <children>
-                                          <CheckBox mnemonicParsing="false" text="Diagonally Close" />
+                                          <CheckBox mnemonicParsing="false" text="Diagonally Close" fx:id="diagonalDrawCheck" onAction="#toggleDrawDiagonal" />
                                           <ColorPicker fx:id="diagonalColorPicker" onAction="#chooseDiagonalColor" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                                        <children>
-                                          <CheckBox mnemonicParsing="false" text="Short Cable" />
+                                          <CheckBox mnemonicParsing="false" text="Short Cable" fx:id="shortDrawCheck" onAction="#toggleDrawShort"/>
                                           <ColorPicker fx:id="shortColorPicker" onAction="#chooseShortColor"/>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" layoutX="10.0" layoutY="144.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                                        <children>
-                                          <CheckBox mnemonicParsing="false" text="Critical Distance" />
+                                          <CheckBox mnemonicParsing="false" text="Critical Distance" fx:id="criticalDrawCheck" onAction="#toggleDrawCritical"/>
                                           <ColorPicker fx:id="criticalColorPicker" onAction="#chooseCriticalColor"/>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" layoutX="10.0" layoutY="160.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                                        <children>
-                                          <CheckBox mnemonicParsing="false" text="Direct Successor" />
+                                          <CheckBox mnemonicParsing="false" text="Direct Successor" fx:id="directSuccDrawCheck" onAction="#toggleDrawDirectSucc"/>
                                           <ColorPicker fx:id="directColorPicker" onAction="#chooseDirectColor"/>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" layoutX="10.0" layoutY="170.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                                        <children>
-                                          <CheckBox mnemonicParsing="false" text="Chamber Triplet" />
+                                          <CheckBox mnemonicParsing="false" text="Chamber Triplet" fx:id="chamberDrawCheck" onAction="#toggleDrawChamber"/>
                                           <ColorPicker fx:id="chamberColorPicker" onAction="#chooseChamberColor"/>
                                        </children>
                                     </HBox>
