@@ -8,11 +8,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
@@ -20,7 +19,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.MainGUI;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -30,11 +28,17 @@ public class MainFrameController {
     @FXML
     public ScrollPane scrollPane;
     @FXML
-    public AnchorPane drawPane;
+    public Pane drawPane;
     @FXML
     private Button addButton;
     @FXML
     private MenuItem loadXML;
+    @FXML
+    private CheckBox heatmapOption;
+    @FXML
+    private ColorPicker blockingColorPicker, diagonalColorPicker, shortColorPicker, criticalColorPicker, directColorPicker, chamberColorPicker;
+    @FXML
+    private Slider heatOpacitySlider;
 
     private CableTree cableTree;
 
@@ -119,5 +123,41 @@ public class MainFrameController {
 
     public void showAnimationStage(ActionEvent actionEvent) {
         //TODO
+    }
+
+    public void toggleHeatMap(ActionEvent actionEvent) {
+        if (heatmapOption.isSelected()){
+            cableTree.drawHeatMap(drawPane);
+        } else {
+            cableTree.hideHeatMap(drawPane);
+        }
+    }
+
+    
+    /* Handle heatmap options */
+    
+    public void chooseBlockingColor(ActionEvent actionEvent) {
+        //Retrieve the chosen color value
+        Color color = this.blockingColorPicker.getValue();
+    }
+
+    public void chooseDiagonalColor(ActionEvent actionEvent) {
+    }
+
+    public void chooseShortColor(ActionEvent actionEvent) {
+    }
+
+    public void chooseCriticalColor(ActionEvent actionEvent) {
+    }
+
+    public void chooseDirectColor(ActionEvent actionEvent) {
+    }
+
+    public void chooseChamberColor(ActionEvent actionEvent) {
+    }
+
+    public void chooseHeatOpacity(MouseEvent mouseEvent) {
+        double opacity = heatOpacitySlider.getValue() / 100;
+        System.out.println("New Opacity: " + opacity);
     }
 }

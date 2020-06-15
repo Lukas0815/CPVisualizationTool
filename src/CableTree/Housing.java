@@ -1,8 +1,12 @@
 package CableTree;
 
+import Input.XMLParser;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
 import java.util.List;
@@ -63,13 +67,18 @@ public class Housing {
     }
 
     public void draw(Pane drawPane) {
+        Text housingName = new Text(this.name);
+        int fontsize = 2 * XMLParser.scale;
+        housingName.setFont(new Font(fontsize));
+        housingName.setX(pos.getX());
+        housingName.setY(pos.getY());
+
         Rectangle rec = new Rectangle(pos.getX(), pos.getY(), this.width, this.height);
         rec.setFill(Color.RED);
         rec.setOpacity(1);
-        rec.getTransforms().add(new Rotate(angle, pos.getX(), pos.getY()));
-        if (angle != 0)
-            rec.setX(pos.getX()-height);
 
-        drawPane.getChildren().add(rec);
+        rec.getTransforms().add(new Rotate(angle, pos.getX()+width/2, pos.getY()+height/2));
+
+        drawPane.getChildren().addAll(rec, housingName);
     }
 }

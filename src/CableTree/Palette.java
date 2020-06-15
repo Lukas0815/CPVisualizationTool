@@ -25,4 +25,20 @@ public class Palette {
         drawPane.getChildren().addAll(rec);
         System.out.println("Drawing Pallett: pos: " + pos.toString() + " width: " + width + " height: " +  height);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Position getPos() {
+        return pos;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
 }

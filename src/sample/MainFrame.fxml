@@ -5,18 +5,21 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -111,7 +114,7 @@
                               </Label>
                               <ButtonBar prefHeight="40.0" prefWidth="200.0">
                                  <buttons>
-                                    <CheckBox mnemonicParsing="false" text="heatmap" />
+                                    <CheckBox fx:id="heatmapOption" mnemonicParsing="false" onAction="#toggleHeatMap" text="heatmap" />
                                     <CheckBox mnemonicParsing="false" text="cycle" />
                                     <CheckBox mnemonicParsing="false" prefHeight="17.0" prefWidth="97.0" text="pure conflict" />
                                  </buttons>
@@ -124,7 +127,57 @@
                                     <Insets top="30.0" />
                                  </VBox.margin>
                               </Label>
-                              <TreeView prefHeight="200.0" prefWidth="200.0" />
+                              <Label text="Opacity">
+                                 <graphic>
+                                    <Slider fx:id="heatOpacitySlider" onMouseClicked="#chooseHeatOpacity" />
+                                 </graphic>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="20.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                                       <children>
+                                          <CheckBox contentDisplay="CENTER" mnemonicParsing="false" text="Blocking Cable" />
+                                          <ColorPicker fx:id="blockingColorPicker" onAction="#chooseBlockingColor" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                                       <children>
+                                          <CheckBox mnemonicParsing="false" text="Diagonally Close" />
+                                          <ColorPicker fx:id="diagonalColorPicker" onAction="#chooseDiagonalColor" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                                       <children>
+                                          <CheckBox mnemonicParsing="false" text="Short Cable" />
+                                          <ColorPicker fx:id="shortColorPicker" onAction="#chooseShortColor"/>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="144.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                                       <children>
+                                          <CheckBox mnemonicParsing="false" text="Critical Distance" />
+                                          <ColorPicker fx:id="criticalColorPicker" onAction="#chooseCriticalColor"/>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="160.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                                       <children>
+                                          <CheckBox mnemonicParsing="false" text="Direct Successor" />
+                                          <ColorPicker fx:id="directColorPicker" onAction="#chooseDirectColor"/>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="170.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                                       <children>
+                                          <CheckBox mnemonicParsing="false" text="Chamber Triplet" />
+                                          <ColorPicker fx:id="chamberColorPicker" onAction="#chooseChamberColor"/>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </VBox>
                               <Label layoutX="165.0" layoutY="107.0" text="pure conflict options">
                                  <VBox.margin>
                                     <Insets top="30.0" />
@@ -154,9 +207,9 @@
    </right>
    <center>
       <ScrollPane fx:id="ScrollPane" BorderPane.alignment="CENTER">
-        <content>
-          <AnchorPane fx:id="drawPane" />
-        </content>
+         <content>
+            <Pane fx:id="drawPane" prefHeight="200.0" prefWidth="200.0" />
+         </content>
       </ScrollPane>
    </center>
 </BorderPane>

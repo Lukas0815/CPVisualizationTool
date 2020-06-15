@@ -2,7 +2,9 @@ package CableTree;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Shape;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /*
@@ -17,6 +19,7 @@ public class CableTree {
     private List<Cavity> cavities;
     private List<Wire> wires;
     private Palette palette;
+    private List<Shape> heats;
 
     public CableTree(Palette palette, List<Housing> housings, List<Cavity> cavities, List<Wire> wires){
         this.palette = palette;
@@ -37,5 +40,30 @@ public class CableTree {
         for (Cavity c : cavities){
             c.draw(drawPane);
         }
+
     }
+
+    public void computeHeatMap(){
+        this.heats = new LinkedList<>();
+
+        //Draw blocking cable constraints
+        for (Cavity c : cavities){
+            if (!c.getActive()) continue; //TODO: Eigentlich ist das ja unnötig, sollte nicht alles angezeigt werden?
+
+            //heats.add(c.drawBlocking(palette));
+            //heats.add(c.drawDiagonallyClose());
+            heats.add(c.drawShortOneSided(palette));
+        }
+    }
+
+    public void drawHeatMap(Pane drawPane) {
+        computeHeatMap();
+        drawPane.getChildren().addAll(this.heats);
+    }
+
+    public void hideHeatMap(Pane drawPane) {
+        drawPane.getChildren().removeAll(this.heats);
+    }
+
+
 }
