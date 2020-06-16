@@ -69,7 +69,8 @@ public class MainFrameController {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open XML cable tree file");
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml"));
-        fileChooser.setInitialDirectory(new File("C:\\Users\\Lukas Schaller\\Documents\\TechTool-master\\Layouts"));
+        if (System.getProperty("os.name").toLowerCase().contains("win"))
+            fileChooser.setInitialDirectory(new File("C:\\Users\\Lukas Schaller\\Documents\\TechTool-master\\Layouts"));
         File file = fileChooser.showOpenDialog(MainGUI.MainStage);
 
         XMLParser parser = new XMLParser(file.getAbsolutePath());

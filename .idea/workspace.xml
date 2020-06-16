@@ -11,18 +11,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Constraints/BlockingConstraint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Constraints/ChamberTripletConstraint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Constraints/Constraint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Constraints/CriticalDistanceConstraint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Constraints/DiagonallyCloseConstraint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Constraints/DirectSuccessorConstraint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Constraints/ShortOneSidedConstraint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CableTree/CableTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CableTree/CableTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CableTree/Cavity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CableTree/Cavity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controllers/MainFrameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controllers/MainFrameController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -3,6 +3,7 @@ package CableTree;
 import Input.ColorScheme;
 import Input.Parameters;
 import Input.XMLParser;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -150,5 +151,13 @@ public class Cavity {
 
     public Shape getBlockingArea() {
         return null;
+    }
+
+    public Shape getDiagonallyCloseArea() {
+        return null;
+    }
+
+    public Point2D getMiddlePoint() {
+        return new Point2D(this.pos.getX() + this.width/2, this.pos.getY() + this.height/2);
     }
 }

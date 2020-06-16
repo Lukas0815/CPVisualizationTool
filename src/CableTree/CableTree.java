@@ -1,7 +1,6 @@
 package CableTree;
 
-import Constraints.BlockingConstraint;
-import Constraints.Constraint;
+import Constraints.*;
 import Input.ColorScheme;
 import Input.Parameters;
 import javafx.geometry.Point2D;
@@ -32,6 +31,7 @@ public class CableTree {
     private List<Shape> heats;
     private ColorScheme colorScheme;
     private boolean[] heatmapPrintFlags;
+    private List<Constraint> constraints;
 
     public CableTree(Palette palette, List<Housing> housings, List<Cavity> cavities, List<Wire> wires){
         this.palette = palette;
@@ -40,6 +40,7 @@ public class CableTree {
         this.wires = wires;
         this.colorScheme = new ColorScheme();
         this.heatmapPrintFlags = new boolean[5];
+        this.constraints = computeConstraints();
     }
 
     public void drawToPanel(Pane drawPane) {
@@ -186,6 +187,8 @@ public class CableTree {
     /*
     Will add Constraint objects to a list based on the Shapes computed for the
     constraints in e.g. the heatmap
+
+    Note: Implemented very inefficiently but simple to understand!
      */
     private List<Constraint> computeConstraints(){
         List<Constraint> constraints = new LinkedList<>();
@@ -197,7 +200,7 @@ public class CableTree {
                 if (c.getPos().getY() > source.getPos().getY()) continue; //Optimization, since only cavities below are blocked
 
                 //at the moment checks for the cavity point (middle point) --> TODO: check if a whole rectangle needs to be checked instead of point
-                boolean isAffected = source.getBlockingArea().contains(new Point2D(c.getPos().getX() + c.getWidth()/2, c.getPos().getY() + c.getHeight()/2));
+                boolean isAffected = source.getBlockingArea().contains(c.getMiddlePoint());
 
                 if (isAffected){
                     constraints.add(new BlockingConstraint(source, c, null));
@@ -206,6 +209,40 @@ public class CableTree {
             }
         }
 
+        //diagonally close constraints
+        for (Cavity source : cavities){
+            for (Cavity c : cavities){
+                boolean isAffected = source.getDiagonallyCloseArea().contains(c.getMiddlePoint());
+
+                if (isAffected){
+                    constraints.add(new DiagonallyCloseConstraint(source, c, null));
+                }
+            }
+        }
+
+        //short one-sided constraints
+        for (Cavity source : cavities){
+            for (Cavity c : cavities){
+                boolean isAffected = source.getDiagonallyCloseArea().contains(c.getMiddlePoint());
+
+                if (isAffected){
+                    constraints.add(new ShortOneSidedConstraint(source, c, null));
+                }
+            }
+        }
+
+        //Critical Distance
+        for (Cavity source : cavities){
+            for (Cavity c : cavities){
+                boolean isAffected = source.getDiagonallyCloseArea().contains(c.getMiddlePoint());
+
+                if (isAffected){
+                    constraints.add(new CriticalDistanceConstraint(source, c, null));
+                }
+            }
+        }
+
+        System.out.println("found constraints: " + constraints.size());
         return constraints;
     }
 }
