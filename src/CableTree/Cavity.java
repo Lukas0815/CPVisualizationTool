@@ -147,4 +147,8 @@ public class Cavity {
         area.setOpacity(1);
         return area;
     }
+
+    public Shape getBlockingArea() {
+        return null;
+    }
 }

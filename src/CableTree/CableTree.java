@@ -1,7 +1,10 @@
 package CableTree;
 
+import Constraints.BlockingConstraint;
+import Constraints.Constraint;
 import Input.ColorScheme;
 import Input.Parameters;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
@@ -52,22 +55,6 @@ public class CableTree {
             c.draw(drawPane);
         }
 
-    }
-
-    public void computeHeatMap(){
-        this.heats = new LinkedList<>();
-
-        //Draw blocking cable constraints
-        for (Cavity c : cavities){
-            if (!c.getActive()) continue; //TODO: Eigentlich ist das ja unnötig, sollte nicht alles angezeigt werden?
-
-            //heats.add(c.drawBlocking(palette, colorScheme));
-            //heats.add(c.drawDiagonallyClose(palette, colorScheme));
-            //heats.add(c.drawShortOneSided(palette, colorScheme));
-        }
-
-        //heats.addAll(computeshortOneSidedAreas());
-        heats.addAll(computeChamberTripletAreas());
     }
 
     public void drawHeatMap(Pane drawPane) {
@@ -194,5 +181,31 @@ public class CableTree {
         assert(i >= 0 && i < heatmapPrintFlags.length);
 
         this.heatmapPrintFlags[i] = b;
+    }
+
+    /*
+    Will add Constraint objects to a list based on the Shapes computed for the
+    constraints in e.g. the heatmap
+     */
+    private List<Constraint> computeConstraints(){
+        List<Constraint> constraints = new LinkedList<>();
+
+        //blocking constraints
+        for (Cavity source : cavities){
+            for (Cavity c : cavities){
+                if (source.equals(c)) continue; //Do not compare with itself!
+                if (c.getPos().getY() > source.getPos().getY()) continue; //Optimization, since only cavities below are blocked
+
+                //at the moment checks for the cavity point (middle point) --> TODO: check if a whole rectangle needs to be checked instead of point
+                boolean isAffected = source.getBlockingArea().contains(new Point2D(c.getPos().getX() + c.getWidth()/2, c.getPos().getY() + c.getHeight()/2));
+
+                if (isAffected){
+                    constraints.add(new BlockingConstraint(source, c, null));
+                    System.out.println("Added blocking constraint!");
+                }
+            }
+        }
+
+        return constraints;
     }
 }
