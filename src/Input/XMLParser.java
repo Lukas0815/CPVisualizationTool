@@ -126,8 +126,10 @@ public class XMLParser {
                 int angle = Integer.parseInt(eElement.getElementsByTagName("Angle").item(0).getTextContent());
 
                 //get cavities of housing
-                cavities = parseCavities(eElement);
-                Housing h = new Housing(name, type, x*scale, y*scale, width*scale, height*scale, cavities, angle);
+                Housing h = new Housing(name, type, x*scale, y*scale, width*scale, height*scale, null, angle);
+                cavities = parseCavities(eElement, h);
+                h.setCavities(cavities);
+
 
                 housings.add(h);
                 housingMap.put(name, h);
@@ -141,7 +143,7 @@ public class XMLParser {
         return housings;
     }
 
-    private List<Cavity> parseCavities(Element root){
+    private List<Cavity> parseCavities(Element root, Housing h){
         List<Cavity> cavities = new LinkedList<Cavity>();
         NodeList nCavities = root.getElementsByTagName("CavityInstance");
 
@@ -160,7 +162,7 @@ public class XMLParser {
                 double height = Double.parseDouble(eElement.getElementsByTagName("Height").item(0).getTextContent());
                 int angle = Integer.parseInt(eElement.getElementsByTagName("Angle").item(0).getTextContent());
 
-                cavities.add(new Cavity(name, x*scale, y*scale, width*scale, height*scale, angle));
+                cavities.add(new Cavity(name, x*scale, y*scale, width*scale, height*scale, angle, h));
             }else{
                 return null;
             }

@@ -81,4 +81,13 @@ public class Housing {
 
         drawPane.getChildren().addAll(rec, housingName);
     }
+
+    public void setCavities(List<Cavity> cavities) {
+        this.cavities = cavities;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

@@ -10,6 +10,6 @@ public class ChamberTripletConstraint extends Constraint{
 
     @Override
     public String toString() {
-        return null;
+        return super.toString() +"\n Chamber Triplet";
     }
 }

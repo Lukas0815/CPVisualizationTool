@@ -15,7 +15,9 @@ public abstract class Constraint {
         this.w = w;
     }
 
-    public abstract String toString();
+    public String toString(){
+        return affected + " < " + source;
+    }
 
     public Cavity getSource() {
         return source;

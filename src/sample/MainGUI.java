@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 public class MainGUI extends Application {
 
     public static Stage MainStage;
+    public static MainFrameController controller;
 
     @Override
     public void init() throws Exception {
@@ -27,7 +28,12 @@ public class MainGUI extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("MainFrame.fxml"));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("MainFrame.fxml"));
+        Parent root = loader.load();
+        controller = loader.getController();
+
+        //Parent root = FXMLLoader.load(getClass().getResource("MainFrame.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Conflict Visualization");

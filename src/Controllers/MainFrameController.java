@@ -1,8 +1,11 @@
 package Controllers;
 
 import CableTree.CableTree;
+import Constraints.Constraint;
 import Input.ColorScheme;
 import Input.XMLParser;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -42,6 +45,8 @@ public class MainFrameController {
     private Slider heatOpacitySlider;
     @FXML
     private CheckBox blockingDrawCheck, diagonalDrawCheck, shortDrawCheck, criticalDrawCheck, directSuccDrawCheck, chamberDrawCheck;
+    @FXML
+    private ListView constraintList;
 
     private CableTree cableTree;
 
@@ -57,11 +62,26 @@ public class MainFrameController {
     }
 
     public void addClicked(MouseEvent mouseEvent) {
-        Rectangle rec = new Rectangle(800, 600, Color.RED);
-        rec.setFill(Color.RED);
-        rec.setOpacity(0.5);
+        if(cableTree == null) return;
 
-        drawPane.getChildren().add(rec);
+        try{
+            AddConstraintController.cavities = cableTree.getCavities();
+            AddConstraintController.cableTree = cableTree;
+            Parent root = FXMLLoader.load(getClass().getResource("../sample/addConstraint.fxml"));
+            Scene pScene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Add Constraint");
+            stage.setScene(pScene);
+
+            //user can only interact with properties window if opened
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(MainGUI.MainStage);
+
+
+            stage.show();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void FileLoadXML(ActionEvent actionEvent) {
@@ -82,6 +102,14 @@ public class MainFrameController {
         cableTree.drawToPanel(drawPane);
 
         adaptGUIColorScheme();
+
+        //Fill ListView with constraint representations
+        updateConstraintView();
+    }
+
+    public void updateConstraintView(){
+        ObservableList constraints = FXCollections.observableArrayList(cableTree.getConstraints());
+        constraintList.setItems(constraints);
     }
 
     private void adaptGUIColorScheme(){
@@ -283,4 +311,5 @@ public class MainFrameController {
         reloadCanvas(actionEvent);
         adaptGUIColorScheme();
     }
+
 }

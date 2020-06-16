@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddConstraintController">
+   <center>
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0">
+         <children>
+            <HBox alignment="CENTER" spacing="50.0">
+               <children>
+                  <Label text="Type" />
+                  <ChoiceBox fx:id="typeChooser" prefWidth="200.0" onAction="#chooseConflictType"/>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+               <children>
+                  <ChoiceBox fx:id="houseChoose1_opt1" prefWidth="150.0" />
+                  <Label text="&lt;|" />
+                  <ChoiceBox fx:id="houseChoose2_opt1" prefWidth="150.0" />
+               </children>
+            </HBox>
+            <HBox fx:id="hboxConstraint2" alignment="CENTER" layoutX="10.0" layoutY="198.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+               <children>
+                  <ChoiceBox fx:id="houseChoose1_opt2" prefWidth="150.0" />
+                  <Label text="&lt;|" />
+                  <ChoiceBox fx:id="houseChoose2_opt2" prefWidth="150.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+   <bottom>
+      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <buttons>
+          <Button fx:id="constraintAddSafe" mnemonicParsing="false" text="save" onAction="#safeClicked" />
+            <Button fx:id="constraintAddAbort" layoutX="535.0" layoutY="18.0" mnemonicParsing="false" text="abort" onAction="#abortClicked"/>
+        </buttons>
+      </ButtonBar>
+   </bottom>
+</BorderPane>

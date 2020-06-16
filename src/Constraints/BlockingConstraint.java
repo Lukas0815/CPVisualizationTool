@@ -11,6 +11,6 @@ public class BlockingConstraint extends Constraint {
 
     @Override
     public String toString() {
-        return super.getAffected() + " <| " + super.getSource();
+        return super.toString() + "\n Blocking";
     }
 }

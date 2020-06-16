@@ -10,6 +10,6 @@ public class ShortOneSidedConstraint extends Constraint{
 
     @Override
     public String toString() {
-        return null;
+        return super.toString() + "\n Short One-Sided" ;
     }
 }

@@ -22,6 +22,7 @@ public class Cavity {
     private double width, height;
     private int angle;
     private boolean active;
+    private Housing housing;
 
     public Cavity(String name, double x, double y, double width, double height, int angle){
         this.name = name;
@@ -31,6 +32,17 @@ public class Cavity {
         this.angle = angle/60; //Arcminutes to degree
         this.active = false;
     }
+
+    public Cavity(String name, double x, double y, double width, double height, int angle, Housing h){
+        this.name = name;
+        this.pos = new Position(x,y);
+        this.width = width;
+        this.height = height;
+        this.angle = angle/60; //Arcminutes to degree
+        this.active = false;
+        this.housing = h;
+    }
+
 
     public Position getPos() {
         return pos;
@@ -81,7 +93,7 @@ public class Cavity {
 
     @Override
     public String toString() {
-        return this.name;
+        return this.housing.getName() + ":" + this.name;
     }
 
 
@@ -150,5 +162,9 @@ public class Cavity {
 
     public Point2D getMiddlePoint() {
         return new Point2D(this.pos.getX() + this.width/2, this.pos.getY() + this.height/2);
+    }
+
+    public Housing getHousing() {
+        return housing;
     }
 }

@@ -236,4 +236,20 @@ public class CableTree {
         System.out.println("found constraints: " + constraints.size());
         return constraints;
     }
+
+    public List<Constraint> getConstraints() {
+        return constraints;
+    }
+
+    public List<Housing> getHousings() {
+        return housings;
+    }
+
+    public List<Cavity> getCavities() {
+        return cavities;
+    }
+
+    public void addConstraint(Constraint constraint) {
+        this.constraints.add(constraint);
+    }
 }

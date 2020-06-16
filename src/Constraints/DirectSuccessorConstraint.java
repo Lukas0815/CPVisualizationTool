@@ -10,6 +10,6 @@ public class DirectSuccessorConstraint extends Constraint{
 
     @Override
     public String toString() {
-        return null;
+        return super.toString() + "\n Direct Successor";
     }
 }
