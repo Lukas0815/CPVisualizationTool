@@ -84,11 +84,11 @@ public class Cavity {
         return this.name;
     }
 
-    public Shape drawBlocking(Palette p, ColorScheme colorScheme) {
-        //We will use a polygon to show the affected area by the blocking constraint
+
+    public Polygon getBlockingArea(Palette p) {
         Polygon blockArea = new Polygon();
-        double x = pos.getX() + width /2;
-        double y = pos.getY() + height/2;
+        double x = this.getPos().getX() + this.getWidth() /2;
+        double y = this.getPos().getY() + this.getHeight()/2;
         double h = p.getHeight();
 
         double tanAlpha = tan(Parameters.blockingAngle);
@@ -102,59 +102,50 @@ public class Cavity {
                 h_alpha, h, //not true, needs calculation with angle
         });
 
-        blockArea.setOpacity(colorScheme.getHeatOpacity());
-        blockArea.setFill(colorScheme.getBlockingColor());
-
         return blockArea;
     }
 
-    public Shape drawDiagonallyClose(Palette p, ColorScheme colorScheme){
+    public Rectangle getDiagonallyCloseArea() {
         Rectangle rec = new Rectangle();
-        double x = this.pos.getX()+width/2;
-        double y = this.pos.getY()+height/2;
-        double h = Parameters.diagH;
-        double v = Parameters.diagV;
-        rec.setX(x-h);
-        rec.setY(y);
-        rec.setWidth(2 *h);
-        rec.setHeight(v);
-
-        rec.setFill(colorScheme.getDiagonalColor());
-        rec.setOpacity(colorScheme.getHeatOpacity());
+        rec.setX(this.pos.getX() + this.width/2 - Parameters.diagH);
+        rec.setY(this.pos.getY() + this.height/2);
+        rec.setWidth(Parameters.diagH *2);
+        rec.setHeight(Parameters.diagV);
 
         return rec;
     }
 
-    public Shape drawShortOneSided(Palette p, ColorScheme colorScheme){
+    public Polygon getShortOneSidedArea(Wire w){
 
         //We will use a polygon to show the affected area
         Polygon area = new Polygon();
-        double x = pos.getX() + width /2;
-        double y = pos.getY() + height/2;
+        double x = getPos().getX() + getWidth() /2;
+        double y = getPos().getY() + getHeight()/2;
         double tanBeta = Math.tan(Parameters.shortAngle);
-        double h_beta_left = tanBeta * x;
-        double h_beta_right = tanBeta * (p.getWidth()-x);
+        double h_beta_left = tanBeta * w.getLength();
+        double h_beta_right = tanBeta * w.getLength();
 
         area.getPoints().addAll(
                 x, y,
-                0.0, (y + h_beta_left),
-                p.getWidth(), (y + h_beta_right)
+                x - w.getLength(), (y + h_beta_left),
+                x + (double) w.getLength(), (y + h_beta_right)
         );
 
-
-        System.out.println(area.getPoints());
-
-        area.setFill(colorScheme.getShortColor());
-        area.setOpacity(1);
         return area;
     }
 
-    public Shape getBlockingArea() {
-        return null;
-    }
+    public Rectangle getChamberTripletArea(){
 
-    public Shape getDiagonallyCloseArea() {
-        return null;
+        Rectangle rec = new Rectangle();
+
+        //compute the points
+        rec.setX(getPos().getX() + getWidth()/2 - Parameters.blockingH);
+        rec.setY(getPos().getY() + getHeight()/2);
+        //TODO: the height is not the correct parameter for chamber triplet
+        rec.setWidth(Parameters.blockingH * 2);
+        rec.setHeight(Parameters.blockingH);
+
+        return rec;
     }
 
     public Point2D getMiddlePoint() {

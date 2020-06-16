@@ -77,8 +77,19 @@ public class CableTree {
         drawPane.getChildren().addAll(this.heats);
     }
 
-    private Collection<Shape> computeDiagonallyClose() {
-        return null;
+    private List<Shape> computeDiagonallyClose() {
+        List<Shape> areas = new LinkedList<>();
+
+        for (Cavity c : cavities){
+            Rectangle rec = c.getDiagonallyCloseArea();
+
+            rec.setOpacity(colorScheme.getHeatOpacity());
+            rec.setFill(colorScheme.getDiagonalColor());
+
+            areas.add(rec);
+        }
+
+        return areas;
     }
 
     public void hideHeatMap(Pane drawPane) {
@@ -94,21 +105,7 @@ public class CableTree {
 
         for (Cavity c : cavities){
             //We will use a polygon to show the affected area by the blocking constraint
-            Polygon blockArea = new Polygon();
-            double x = c.getPos().getX() + c.getWidth() /2;
-            double y = c.getPos().getY() + c.getHeight()/2;
-            double h = p.getHeight();
-
-            double tanAlpha = tan(Parameters.blockingAngle);
-            double h_alpha = x * tanAlpha;
-
-            blockArea.getPoints().addAll(new Double[]{
-                    x, y,
-                    x+ Parameters.blockingH, y,
-                    x+ Parameters.blockingH, h,
-                    0.0, h,
-                    h_alpha, h, //not true, needs calculation with angle
-            });
+            Shape blockArea = c.getBlockingArea(p);
 
             blockArea.setOpacity(colorScheme.getHeatOpacity());
             blockArea.setFill(colorScheme.getBlockingColor());
@@ -128,22 +125,7 @@ public class CableTree {
             //only look at short cables
             if (w.getLength() > Parameters.shortL) continue;
 
-            Cavity c = w.getCavities()[0];
-
-            //We will use a polygon to show the affected area
-            Polygon area = new Polygon();
-            double x = c.getPos().getX() + c.getWidth() /2;
-            double y = c.getPos().getY() + c.getHeight()/2;
-            double tanBeta = Math.tan(Parameters.shortAngle);
-            double h_beta_left = tanBeta * w.getLength();
-            double h_beta_right = tanBeta * w.getLength();
-
-            area.getPoints().addAll(
-                    x, y,
-                    x - w.getLength(), (y + h_beta_left),
-                    x + (double) w.getLength(), (y + h_beta_right)
-            );
-
+            Polygon area = w.getCavities()[0].getShortOneSidedArea(w);
 
             System.out.println(area.getPoints() + " length of cable: " + w.getLength());
 
@@ -161,15 +143,10 @@ public class CableTree {
         List<Shape> areas = new LinkedList<>();
 
         for (Cavity c: cavities){
-            Rectangle rec = new Rectangle();
+            Rectangle rec = c.getChamberTripletArea();
+
             rec.setFill(colorScheme.getChamberColor());
             rec.setOpacity(colorScheme.getHeatOpacity());
-
-            //compute the points
-            rec.setX(c.getPos().getX() + c.getWidth()/2 - Parameters.blockingH);
-            rec.setY(c.getPos().getY() + c.getHeight()/2);
-            rec.setWidth(Parameters.blockingH * 2);
-            rec.setHeight(Parameters.blockingH);
 
             areas.add(rec);
         }
@@ -195,12 +172,18 @@ public class CableTree {
 
         //blocking constraints
         for (Cavity source : cavities){
+            //Only check for used cavities
+           /* if (!source.getActive())
+                continue;
+             */
+
             for (Cavity c : cavities){
+                //if (!c.getActive()) continue;
                 if (source.equals(c)) continue; //Do not compare with itself!
                 if (c.getPos().getY() > source.getPos().getY()) continue; //Optimization, since only cavities below are blocked
 
                 //at the moment checks for the cavity point (middle point) --> TODO: check if a whole rectangle needs to be checked instead of point
-                boolean isAffected = source.getBlockingArea().contains(c.getMiddlePoint());
+                boolean isAffected = source.getBlockingArea(palette).contains(c.getMiddlePoint());
 
                 if (isAffected){
                     constraints.add(new BlockingConstraint(source, c, null));
@@ -221,16 +204,21 @@ public class CableTree {
         }
 
         //short one-sided constraints
-        for (Cavity source : cavities){
+        for (Wire w : wires){
+
+            if (w.getLength() > Parameters.shortL) continue; //only respect short cables
+            Cavity source = w.getCavities()[0];
+
             for (Cavity c : cavities){
-                boolean isAffected = source.getDiagonallyCloseArea().contains(c.getMiddlePoint());
+                boolean isAffected = source.getShortOneSidedArea(w).contains(c.getMiddlePoint());
 
                 if (isAffected){
-                    constraints.add(new ShortOneSidedConstraint(source, c, null));
+                    constraints.add(new ShortOneSidedConstraint(source, c, w));
                 }
             }
-        }
 
+        }
+/*
         //Critical Distance
         for (Cavity source : cavities){
             for (Cavity c : cavities){
@@ -241,6 +229,9 @@ public class CableTree {
                 }
             }
         }
+
+
+ */
 
         System.out.println("found constraints: " + constraints.size());
         return constraints;
