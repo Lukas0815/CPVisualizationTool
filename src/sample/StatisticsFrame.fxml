@@ -19,8 +19,8 @@
    <bottom>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <PieChart />
-            <BarChart>
+            <PieChart fx:id="pieChart" />
+            <BarChart fx:id="barChart" >
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>

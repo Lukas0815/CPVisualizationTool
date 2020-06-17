@@ -160,7 +160,11 @@ public class MainFrameController {
 
     public void showStatisticsStage(ActionEvent actionEvent) {
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("../sample/StatisticsFrame.fxml"));
+            StatsController.cableTree = this.cableTree;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = loader.load(getClass().getResource("../sample/StatisticsFrame.fxml"));
+
+
             Scene pScene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Statistics");
