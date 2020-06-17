@@ -30,6 +30,7 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
                   <MenuItem fx:id="menuItemLoadXML" mnemonicParsing="false" onAction="#FileLoadXML" text="Load XML" />
+                  <MenuItem fx:id="menuItemLoadDat" mnemonicParsing="false" onAction="#FileLoadDat" text="Load DAT" />
                   <MenuItem fx:id="editProperties" mnemonicParsing="false" onAction="#loadPropertyStage" text="Edit Properties" />
                 <MenuItem fx:id="menuColorSchemes" mnemonicParsing="false" onAction="#loadColorScheme" text="Color schemes" />
               <MenuItem mnemonicParsing="false" text="Close" />

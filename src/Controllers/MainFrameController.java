@@ -3,6 +3,7 @@ package Controllers;
 import CableTree.CableTree;
 import Constraints.Constraint;
 import Input.ColorScheme;
+import Input.DatParser;
 import Input.XMLParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +25,7 @@ import javafx.stage.Stage;
 import sample.MainGUI;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
@@ -312,4 +314,19 @@ public class MainFrameController {
         adaptGUIColorScheme();
     }
 
+    public void FileLoadDat(ActionEvent actionEvent) {
+        //Let user select the file
+        final FileChooser fc = new FileChooser();
+        fc.setTitle("Open the corresponding .dat file");
+        fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Dat files (*.dat)", "*.dat"));
+        File file = fc.showOpenDialog(MainGUI.MainStage);
+
+        //create internal representation of dat file
+        DatParser datParser = new DatParser(file);
+        try {
+            datParser.parse();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }
