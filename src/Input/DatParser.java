@@ -1,5 +1,7 @@
 package Input;
 
+import CableTree.DatRepresentation;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
@@ -21,7 +23,7 @@ public class DatParser {
         this.disjunctives = new LinkedList<>();
     }
 
-    public void parse() throws FileNotFoundException {
+    public DatRepresentation parse() throws FileNotFoundException {
         assert (file != null);
         constraintType ct = constraintType.Undefined;
 
@@ -41,6 +43,7 @@ public class DatParser {
                 String bString = s.substring(4).replace(";", "");
                 this.b = Integer.parseInt(bString);
                 System.out.println("b = " + this.b);
+                continue;
             }
 
             //Figure out what constraint type is on
@@ -59,27 +62,37 @@ public class DatParser {
                 continue;
             }
 
-            if (s.contains("DirectSuccessors")){
+            if (s.contains("Successor")){
                 ct = constraintType.DirectSucc;
                 continue;
             }
 
             //Parse actual constraints
-            if (!s.contains("<")) continue;
+            if (!s.contains("<") && ct != constraintType.DirectSucc) continue;
+            if (ct == constraintType.DirectSucc && s.contains("};")) ct = constraintType.Undefined;
 
             switch (ct){
-                case Atomic -> atomics.add(s);
-                case DirectSucc -> directSuccs.add(s);
-                case SoftAtomic -> softAtomics.add(s);
-                case Disjunctive -> disjunctives.add(s);
-                default -> System.out.println("Error parsing: unknown type s: " + s);
+                case Atomic:
+                    atomics.add(s);
+                    break;
+                case DirectSucc:
+                    directSuccs.add(s.substring(0, s.length()-1).trim());
+                    break;
+                case SoftAtomic:
+                    softAtomics.add(s);
+                    break;
+                case Disjunctive:
+                    disjunctives.add(s);
+                    break;
+                default:
+                    continue;
             }
 
 
         }
 
-        System.out.println("Finished parsing .dat file! Atomics: " + atomics.size() + " direct: " + directSuccs.size());
         scanner.close();
 
+        return new DatRepresentation(atomics, softAtomics, disjunctives, directSuccs,k,b);
     }
 }

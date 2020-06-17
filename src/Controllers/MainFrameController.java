@@ -23,6 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.MainGUI;
+import CableTree.DatRepresentation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -324,9 +325,13 @@ public class MainFrameController {
         //create internal representation of dat file
         DatParser datParser = new DatParser(file);
         try {
-            datParser.parse();
+            DatRepresentation datRepr = datParser.parse();
+            //TODO: do sth with datRepr
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        //See if the .dat file matches the current cableTree
+        //TODO
     }
 }

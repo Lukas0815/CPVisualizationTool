@@ -10,9 +10,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Math.tan;
 
@@ -32,6 +30,7 @@ public class CableTree {
     private ColorScheme colorScheme;
     private boolean[] heatmapPrintFlags;
     private List<Constraint> constraints;
+    private Map<Cavity, Integer> cavFreqMap;
 
     public CableTree(Palette palette, List<Housing> housings, List<Cavity> cavities, List<Wire> wires){
         this.palette = palette;
@@ -41,6 +40,9 @@ public class CableTree {
         this.colorScheme = new ColorScheme();
         this.heatmapPrintFlags = new boolean[5];
         this.constraints = computeConstraints();
+
+        this.cavFreqMap = new HashMap();
+        makeFreqMap();
     }
 
     public void drawToPanel(Pane drawPane) {
@@ -251,5 +253,31 @@ public class CableTree {
 
     public void addConstraint(Constraint constraint) {
         this.constraints.add(constraint);
+    }
+
+    private void makeFreqMap(){
+        for (Constraint c : constraints){
+            Cavity cav1 = c.getSource();
+            Cavity cav2 = c.getAffected();
+
+            if (!this.cavFreqMap.containsKey(cav1)){
+                this.cavFreqMap.put(cav1, 1);
+            } else {
+                this.cavFreqMap.put(cav1, this.cavFreqMap.get(cav1) +1);
+            }
+
+            if (!this.cavFreqMap.containsKey(cav2)){
+                this.cavFreqMap.put(cav2, 1);
+            } else {
+                this.cavFreqMap.put(cav2, this.cavFreqMap.get(cav2) +1);
+            }
+
+        }
+
+        System.out.println(this.cavFreqMap);
+    }
+
+    public Map<Cavity, Integer> getCavFreqMap() {
+        return cavFreqMap;
     }
 }
