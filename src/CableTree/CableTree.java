@@ -45,7 +45,7 @@ public class CableTree {
         makeFreqMap();
     }
 
-    public void drawToPanel(Pane drawPane) {
+    public void drawToPanel(Pane drawPane, boolean statMode) {
         //Draw the pallet first
         palette.draw(drawPane);
 
@@ -55,7 +55,13 @@ public class CableTree {
         }
 
         for (Cavity c : cavities){
-            c.draw(drawPane);
+
+            if (statMode){
+                c.drawStats(drawPane, cavFreqMap.get(c));
+            } else {
+                c.draw(drawPane);
+            }
+
         }
 
     }

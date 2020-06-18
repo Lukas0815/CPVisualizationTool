@@ -183,14 +183,14 @@ public class DatRepresentation {
                 Map<Integer, String> firstCountInv = invert(firstCount);
 
                 //set the value if amount matches now
-                for (Cavity c : mCavs){
-                    if (!firstCountInv.containsKey(cavFreqCT.get(c)))
+                for (Cavity cav : mCavs){
+                    if (!firstCountInv.containsKey(cavFreqCT.get(cav)))
                         continue;
 
-                    c.setReprStr(firstCountInv.get(cavFreqCT.get(c)));
+                    cav.setReprStr(firstCountInv.get(cavFreqCT.get(cav)));
                 }
 
-                
+
             } else if (c.getAffected().getReprStr() == null){
                 //TODO: loop through dat-Strings and match <firstCav.getReprStr(), *>
             }

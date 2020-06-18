@@ -102,7 +102,7 @@ public class MainFrameController {
         //Clear previous drawings
         drawPane.getChildren().clear();
         //Now draw the tree to the panel
-        cableTree.drawToPanel(drawPane);
+        cableTree.drawToPanel(drawPane, false);
 
         adaptGUIColorScheme();
 
@@ -152,7 +152,7 @@ public class MainFrameController {
         //Clear previous drawings
         drawPane.getChildren().clear();
         //Now draw the tree to the panel
-        cableTree.drawToPanel(drawPane);
+        cableTree.drawToPanel(drawPane, false);
 
         //draw anything else based on chosen options
         if (heatmapOption.isSelected()) cableTree.drawHeatMap(drawPane);
