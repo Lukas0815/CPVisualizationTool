@@ -129,8 +129,6 @@ public class CableTree {
 
             Polygon area = w.getCavities()[0].getShortOneSidedArea(w);
 
-            System.out.println(area.getPoints() + " length of cable: " + w.getLength());
-
             area.setFill(colorScheme.getShortColor());
             area.setOpacity(colorScheme.getHeatOpacity());
 
@@ -189,7 +187,6 @@ public class CableTree {
 
                 if (isAffected){
                     constraints.add(new BlockingConstraint(source, c, null));
-                    System.out.println("Added blocking constraint!");
                 }
             }
         }
@@ -235,7 +232,6 @@ public class CableTree {
 
  */
 
-        System.out.println("found constraints: " + constraints.size());
         return constraints;
     }
 

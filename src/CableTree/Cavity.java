@@ -23,6 +23,7 @@ public class Cavity {
     private int angle;
     private boolean active;
     private Housing housing;
+    private String reprStr;
 
     public Cavity(String name, double x, double y, double width, double height, int angle){
         this.name = name;
@@ -166,5 +167,13 @@ public class Cavity {
 
     public Housing getHousing() {
         return housing;
+    }
+
+    public String getReprStr() {
+        return reprStr;
+    }
+
+    public void setReprStr(String reprStr) {
+        this.reprStr = reprStr;
     }
 }

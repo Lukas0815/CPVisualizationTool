@@ -330,7 +330,7 @@ public class MainFrameController {
         DatParser datParser = new DatParser(file);
         try {
             DatRepresentation datRepr = datParser.parse();
-            //TODO: do sth with datRepr
+            datRepr.matchWithCableTree(this.cableTree);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -1,9 +1,13 @@
 package CableTree;
 
+import Constraints.Constraint;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class DatRepresentation {
 
@@ -82,7 +86,6 @@ public class DatRepresentation {
             addToFreqMap(Integer.toString(left));
         }
 
-        System.out.println(cavFreqMap);
     }
 
     private void addToFreqMap(String s){
@@ -95,5 +98,138 @@ public class DatRepresentation {
 
     public Map<String, Integer> getCavFreqMap() {
         return cavFreqMap;
+    }
+
+    public boolean matchWithCableTree(CableTree cableTree){
+
+        //inverse map since I would like to search representation given an amount
+        Map<Integer, List<String>> datCavs = createReprMap(this.cavFreqMap);
+        Map<Cavity, Integer> cavFreqCT = cableTree.getCavFreqMap();
+
+        //maps to store information that could not be matched!
+        List<List<String>> mDats = new LinkedList<>();
+        List<Cavity> mCavs = new LinkedList<Cavity>();
+
+        System.out.println("datCavs: " + datCavs);
+
+        //Match via frequency
+        for (Cavity c : cableTree.getCavities()){
+            int amount = cavFreqCT.get(c);
+            List<String> datRepr = datCavs.get(amount);
+
+            if (datRepr == null) {
+                System.out.println("Error number 5");
+                continue;
+                //return false;
+            }
+
+            if (datRepr.size() == 1){
+                c.setReprStr(datRepr.get(0));
+            } else {
+                //multiple cavities have are used this often in the constraints --> perform extra matching
+                //Save these cases for further investigation afterwards
+                mDats.add(datRepr);
+                mCavs.add(c);
+            }
+        }
+
+        //Check if everything has been matched
+        if (mCavs.isEmpty()) return true;
+
+        List<String> result = new LinkedList<>();
+
+        //Match constraints that could not be matched by taking constraints into account
+        for (Constraint c : cableTree.getConstraints()){
+            //only consider constraints where cavity is unclear
+            if (c.getSource().getReprStr() != null && c.getAffected().getReprStr() != null)
+                continue;
+
+            if (c.getSource().getReprStr() == null){
+                //Loop through dat-Strings of constraints and match <*, secCav.getReprStr()>
+                List<String> atomicType = new LinkedList<String>(this.atomics);
+                atomicType.addAll(this.atomics);
+                atomicType.addAll(this.softAtomics);
+
+                for (String s : atomicType){
+                    String cavs[] = s.split(",");
+                    if (cavs[1].contains(c.getAffected().getReprStr()))
+                        result.add(cavs[0]); //TODO: Maybe format string so that "< " is not included?
+                }
+
+                for (String s: disjunctives){
+                    String cavs[] = s.split(",");
+
+                    if (cavs[1].contains(c.getAffected().getReprStr()))
+                        result.add(cavs[0]); //TODO: format string
+                    if (cavs[3].contains(c.getAffected().getReprStr()))
+                        result.add(cavs[2]);
+                }
+
+                for (String s : directSuccs){
+                    if (s.contains(c.getAffected().getReprStr()))
+                            result.add(directSuccPre(s));
+                }
+
+
+                //now count the first cavs frequency
+                Map<String, Integer> firstCount = new HashMap();
+                for (String s : result){
+                    if (firstCount.containsKey(s))
+                        firstCount.put(s, firstCount.get(s) +1);
+                    else
+                        firstCount.put(s, 1);
+                }
+
+                Map<Integer, String> firstCountInv = invert(firstCount);
+
+                //set the value if amount matches now
+                for (Cavity c : mCavs){
+                    if (!firstCountInv.containsKey(cavFreqCT.get(c)))
+                        continue;
+
+                    c.setReprStr(firstCountInv.get(cavFreqCT.get(c)));
+                }
+
+                
+            } else if (c.getAffected().getReprStr() == null){
+                //TODO: loop through dat-Strings and match <firstCav.getReprStr(), *>
+            }
+        }
+
+
+
+        return false;
+    }
+
+    private static Map<Integer, List<String>> createReprMap(Map<String, Integer> map) {
+
+        Map<Integer, List<String>> inv = new HashMap<Integer, List<String>>();
+
+        for (Entry<String, Integer> entry : map.entrySet())
+            if (inv.containsKey(entry.getValue()))
+                inv.get(entry.getValue()).add(entry.getKey());
+            else
+                inv.put(entry.getValue(), List.of(entry.getKey()));
+
+        return inv;
+    }
+
+    private static <V, K> Map<V, K> invert(Map<K, V> map) {
+
+        Map<V, K> inv = new HashMap<V, K>();
+
+        for (Entry<K, V> entry : map.entrySet())
+            inv.put(entry.getValue(), entry.getKey());
+
+        return inv;
+    }
+
+    /*
+    Given just the direct successor string as found in dat ("x,"), extract the other part of the constraint
+     */
+    private String directSuccPre(String s){
+        int sInt = Integer.parseInt(s);
+
+        return sInt > this.b ? String.valueOf(sInt - this.b) : String.valueOf(sInt + this.b);
     }
 }
