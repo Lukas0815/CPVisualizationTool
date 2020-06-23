@@ -1,6 +1,8 @@
 package Controllers;
 
 import CableTree.CableTree;
+import Constraints.BlockingConstraint;
+import Constraints.Conflict;
 import Constraints.Constraint;
 import Input.ColorScheme;
 import Input.DatParser;
@@ -28,6 +30,14 @@ import CableTree.DatRepresentation;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import CableTree.Cavity;
 
 
 public class MainFrameController {
@@ -182,7 +192,25 @@ public class MainFrameController {
     }
 
     public void showAnimationStage(ActionEvent actionEvent) {
-        //TODO
+        List<Constraint> conflicts = new LinkedList<Constraint>();
+        Cavity a = new Cavity("a", 0, 0, 0,0,0);
+        Cavity b = new Cavity("b", 0, 0, 0,0,0);
+        Cavity c = new Cavity("c", 0, 0, 0,0,0);
+        Cavity d = new Cavity("d", 0, 0, 0,0,0);
+        Cavity e = new Cavity("e", 0, 0, 0,0,0);
+        Cavity f = new Cavity("f", 0, 0, 0,0,0);
+
+        conflicts.add(new BlockingConstraint(a, b, null));
+        conflicts.add(new BlockingConstraint(b, f, null));
+        conflicts.add(new BlockingConstraint(b, c, null));
+        conflicts.add(new BlockingConstraint(c, a, null));
+        conflicts.add(new BlockingConstraint(f, d, null));
+
+
+        Conflict conflict = new Conflict(conflicts);
+
+        System.out.println("Circle: " + conflict.getCircle(conflicts.get(2)));
+
     }
 
     public void toggleHeatMap(ActionEvent actionEvent) {

@@ -113,7 +113,8 @@ public class Cavity {
 
     @Override
     public String toString() {
-        return this.housing.getName() + ":" + this.name;
+        //return this.housing.getName() + ":" + this.name;
+        return this.name;
     }
 
 
