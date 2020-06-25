@@ -175,7 +175,19 @@ public class MainFrameController {
     }
 
     public void showAnimationStage(ActionEvent actionEvent) {
-        //TODO
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("../sample/AnimationStage.fxml"));
+            Scene pScene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Animation");
+            stage.setScene(pScene);
+
+            stage.show();
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 
     public void toggleHeatMap(ActionEvent actionEvent) {
