@@ -9,3 +9,8 @@
 .idea/libraries/lib.xml
 .idea/workspace.xml
 .idea/workspace.xml
+
+out/
+./*.class
+
+*.class

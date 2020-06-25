@@ -1,8 +1,11 @@
 package Controllers;
 
 import CableTree.CableTree;
+import Constraints.BlockingConstraint;
+import Constraints.Conflict;
 import Constraints.Constraint;
 import Input.ColorScheme;
+import Input.DatParser;
 import Input.XMLParser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,9 +25,19 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.MainGUI;
+import CableTree.DatRepresentation;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import CableTree.Cavity;
 
 
 public class MainFrameController {
@@ -99,7 +112,7 @@ public class MainFrameController {
         //Clear previous drawings
         drawPane.getChildren().clear();
         //Now draw the tree to the panel
-        cableTree.drawToPanel(drawPane);
+        cableTree.drawToPanel(drawPane, false);
 
         adaptGUIColorScheme();
 
@@ -149,7 +162,7 @@ public class MainFrameController {
         //Clear previous drawings
         drawPane.getChildren().clear();
         //Now draw the tree to the panel
-        cableTree.drawToPanel(drawPane);
+        cableTree.drawToPanel(drawPane, false);
 
         //draw anything else based on chosen options
         if (heatmapOption.isSelected()) cableTree.drawHeatMap(drawPane);
@@ -157,7 +170,11 @@ public class MainFrameController {
 
     public void showStatisticsStage(ActionEvent actionEvent) {
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("../sample/StatisticsFrame.fxml"));
+            StatsController.cableTree = this.cableTree;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = loader.load(getClass().getResource("../sample/StatisticsFrame.fxml"));
+
+
             Scene pScene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Statistics");
@@ -187,6 +204,24 @@ public class MainFrameController {
         } catch (IOException e){
             e.printStackTrace();
         }
+        List<Constraint> conflicts = new LinkedList<Constraint>();
+        Cavity a = new Cavity("a", 0, 0, 0,0,0);
+        Cavity b = new Cavity("b", 0, 0, 0,0,0);
+        Cavity c = new Cavity("c", 0, 0, 0,0,0);
+        Cavity d = new Cavity("d", 0, 0, 0,0,0);
+        Cavity e = new Cavity("e", 0, 0, 0,0,0);
+        Cavity f = new Cavity("f", 0, 0, 0,0,0);
+
+        conflicts.add(new BlockingConstraint(a, b, null));
+        conflicts.add(new BlockingConstraint(b, f, null));
+        conflicts.add(new BlockingConstraint(b, c, null));
+        conflicts.add(new BlockingConstraint(c, a, null));
+        conflicts.add(new BlockingConstraint(f, d, null));
+
+
+        Conflict conflict = new Conflict(conflicts);
+
+        System.out.println("Circle: " + conflict.getCircle(conflicts.get(2)));
 
     }
 
@@ -324,4 +359,23 @@ public class MainFrameController {
         adaptGUIColorScheme();
     }
 
+    public void FileLoadDat(ActionEvent actionEvent) {
+        //Let user select the file
+        final FileChooser fc = new FileChooser();
+        fc.setTitle("Open the corresponding .dat file");
+        fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Dat files (*.dat)", "*.dat"));
+        File file = fc.showOpenDialog(MainGUI.MainStage);
+
+        //create internal representation of dat file
+        DatParser datParser = new DatParser(file);
+        try {
+            DatRepresentation datRepr = datParser.parse();
+            datRepr.matchWithCableTree(this.cableTree);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        //See if the .dat file matches the current cableTree
+        //TODO
+    }
 }

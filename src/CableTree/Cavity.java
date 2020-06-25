@@ -23,6 +23,7 @@ public class Cavity {
     private int angle;
     private boolean active;
     private Housing housing;
+    private String reprStr;
 
     public Cavity(String name, double x, double y, double width, double height, int angle){
         this.name = name;
@@ -91,9 +92,29 @@ public class Cavity {
         drawPane.getChildren().addAll(rec, cavityName);
     }
 
+    public void drawStats(Pane drawPane, Integer integer) {
+        Rectangle rec = new Rectangle(pos.getX(), pos.getY(), this.width, this.height);
+        Text cavityName = new Text(String.valueOf(integer));
+        int fontsize = 1 * XMLParser.scale;
+        cavityName.setFont(new Font(fontsize));
+        cavityName.setX(pos.getX() + width/4);
+        cavityName.setY(pos.getY() + height - fontsize/2);
+
+        rec.setFill(Color.GRAY);
+        rec.setStroke(Color.BLACK);
+        if(active){
+            rec.setOpacity(1);
+        } else {
+            rec.setOpacity(0.3);
+        }
+
+        drawPane.getChildren().addAll(rec, cavityName);
+    }
+
     @Override
     public String toString() {
-        return this.housing.getName() + ":" + this.name;
+        //return this.housing.getName() + ":" + this.name;
+        return this.name;
     }
 
 
@@ -167,4 +188,13 @@ public class Cavity {
     public Housing getHousing() {
         return housing;
     }
+
+    public String getReprStr() {
+        return reprStr;
+    }
+
+    public void setReprStr(String reprStr) {
+        this.reprStr = reprStr;
+    }
+
 }
