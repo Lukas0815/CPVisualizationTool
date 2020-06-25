@@ -31,6 +31,7 @@ public class CableTree {
     private boolean[] heatmapPrintFlags;
     private List<Constraint> constraints;
     private Map<Cavity, Integer> cavFreqMap;
+    private List<Conflict> conflicts;
 
     public CableTree(Palette palette, List<Housing> housings, List<Cavity> cavities, List<Wire> wires){
         this.palette = palette;
@@ -42,6 +43,7 @@ public class CableTree {
         this.constraints = computeConstraints();
 
         this.cavFreqMap = new HashMap();
+        this.conflicts = new LinkedList<>();
         makeFreqMap();
     }
 
@@ -281,5 +283,13 @@ public class CableTree {
 
     public Map<Cavity, Integer> getCavFreqMap() {
         return cavFreqMap;
+    }
+
+    public void addConflict(Conflict c){
+        this.conflicts.add(c);
+    }
+
+    public List<Conflict> getConflicts(){
+        return this.conflicts;
     }
 }

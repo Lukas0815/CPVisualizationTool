@@ -192,7 +192,30 @@ public class MainFrameController {
     }
 
     public void showAnimationStage(ActionEvent actionEvent) {
+
+        //Generating an artificial conflict for testing purpose
+        //TODO: remove this section after testing
+        List<Constraint> conflicts = new LinkedList<Constraint>();
+        Cavity a = new Cavity("a", 0, 0, 0,0,0);
+        Cavity b = new Cavity("b", 0, 0, 0,0,0);
+        Cavity c = new Cavity("c", 0, 0, 0,0,0);
+        Cavity d = new Cavity("d", 0, 0, 0,0,0);
+        Cavity f = new Cavity("f", 0, 0, 0,0,0);
+
+        conflicts.add(new BlockingConstraint(a, b, null));
+        conflicts.add(new BlockingConstraint(b, f, null));
+        conflicts.add(new BlockingConstraint(b, c, null));
+        conflicts.add(new BlockingConstraint(c, a, null));
+        conflicts.add(new BlockingConstraint(f, d, null));
+
+
+        Conflict conflict = new Conflict(conflicts, "conflict 1");
+
+        this.cableTree.addConflict(conflict);
+
         try {
+            AnimationController.cableTree = this.cableTree;
+
             Parent root = FXMLLoader.load(getClass().getResource("../sample/AnimationStage.fxml"));
             Scene pScene = new Scene(root);
             Stage stage = new Stage();
@@ -204,24 +227,7 @@ public class MainFrameController {
         } catch (IOException e){
             e.printStackTrace();
         }
-        List<Constraint> conflicts = new LinkedList<Constraint>();
-        Cavity a = new Cavity("a", 0, 0, 0,0,0);
-        Cavity b = new Cavity("b", 0, 0, 0,0,0);
-        Cavity c = new Cavity("c", 0, 0, 0,0,0);
-        Cavity d = new Cavity("d", 0, 0, 0,0,0);
-        Cavity e = new Cavity("e", 0, 0, 0,0,0);
-        Cavity f = new Cavity("f", 0, 0, 0,0,0);
 
-        conflicts.add(new BlockingConstraint(a, b, null));
-        conflicts.add(new BlockingConstraint(b, f, null));
-        conflicts.add(new BlockingConstraint(b, c, null));
-        conflicts.add(new BlockingConstraint(c, a, null));
-        conflicts.add(new BlockingConstraint(f, d, null));
-
-
-        Conflict conflict = new Conflict(conflicts);
-
-        System.out.println("Circle: " + conflict.getCircle(conflicts.get(2)));
 
     }
 
@@ -377,5 +383,10 @@ public class MainFrameController {
 
         //See if the .dat file matches the current cableTree
         //TODO
+
+        //Find Conflict
+        //TODO
+
+
     }
 }

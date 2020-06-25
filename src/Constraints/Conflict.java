@@ -10,10 +10,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Conflict {
 
-    private List<Constraint> constraints;
+    private List<Constraint> constraints, circle;
+    private String name;
 
-    public Conflict(List<Constraint> constraints){
+    public Conflict(List<Constraint> constraints, String name){
         this.constraints = constraints;
+        this.name = name;
+        this.circle = constraints.size() > 0 ? getCircle(constraints.get(0)): new LinkedList<>();
     }
 
 
@@ -82,5 +85,13 @@ public class Conflict {
         }
 
         return succs;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public int getConflictPermutationNumber(){
+        return this.circle.size();
     }
 }

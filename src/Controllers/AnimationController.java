@@ -1,19 +1,23 @@
 package Controllers;
 
+import CableTree.CableTree;
+import Constraints.Conflict;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.List;
+import java.util.ListIterator;
 
 public class AnimationController {
 
@@ -33,10 +37,57 @@ public class AnimationController {
     private Rectangle roboArm;
     private double armDefaultX, armDefaultY;
     private final double animationTime = 1000;
+    private List<Conflict> conflicts;
+    private Conflict currentConflict;
+
+    public static CableTree cableTree;
 
 
     public void initialize(){
+        //fill conflict chooser
+        ObservableList conflictList = FXCollections.observableArrayList();
+        this.conflicts = cableTree.getConflicts();
+        for (Conflict c : conflicts)
+            conflictList.add(c.getName());
 
+        conflictChooser.setItems(conflictList);
+
+        //If a conflict exists, fill in all other elements
+        Conflict first = this.conflicts.get(0);
+        if(first != null){
+            this.currentConflict = first;
+            //set choosers default value to first conflict
+            conflictChooser.setValue(conflictList.get(0));
+            fillConflictView(first);
+            setPermutationNumber(first.getConflictPermutationNumber());
+            fillIterationChooser(first);
+            fillIterationView(first, 0);
+        }
+
+        conflictChooser.show();
+
+
+        cableTree.drawToPanel(animationPane, false);
+    }
+
+
+    public void animateAll(ActionEvent actionEvent) {
+        this.armDefaultX = this.animationPane.getWidth() - 50;
+        this.armDefaultY = this.animationPane.getHeight() /2;
+
+        this.roboArm = spawnArm(armDefaultX, armDefaultY, this.animationPane);
+
+        //testing
+        moveArm(400,400);
+
+    }
+
+    public void prevButtonPressed(ActionEvent actionEvent) {
+        //TODO
+    }
+
+    public void nextButtonPressed(ActionEvent actionEvent) {
+        //TODO
     }
 
     private Rectangle spawnArm(double x, double y, Pane drawPane){
@@ -86,24 +137,73 @@ public class AnimationController {
         t1.play();
     }
 
-    public void animateAll(ActionEvent actionEvent) {
-        this.armDefaultX = this.animationPane.getWidth() - 50;
-        this.armDefaultY = this.animationPane.getHeight() /2;
+    private void moveArm(double x, double y){
 
-        this.roboArm = spawnArm(armDefaultX, armDefaultY, this.animationPane);
+        KeyFrame vertical = new KeyFrame(Duration.millis(animationTime),
+                new KeyValue(this.roboArm.translateYProperty(), y - roboArm.getY()));
 
-        //testing
-        roboArm.setX(400);
-        roboArm.setY(400);
+        KeyFrame horizontal = new KeyFrame(Duration.millis(animationTime),
+                new KeyValue(this.roboArm.translateXProperty(), x - roboArm.getX()));
 
+        Timeline verticalTime = new Timeline();
+        verticalTime.getKeyFrames().add(vertical);
+
+        Timeline horizontalTime = new Timeline();
+        horizontalTime.getKeyFrames().add(horizontal);
+
+        verticalTime.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                horizontalTime.play();
+            }
+        });
+
+        verticalTime.play();
     }
 
-    public void prevButtonPressed(ActionEvent actionEvent) {
-        //TODO
+    private void fillConflictView(Conflict c){
+        ObservableList constraints = FXCollections.observableArrayList(c.getCircle(c.getConstraints().get(0)));
+        this.conflictView.setItems(constraints);
     }
 
-    public void nextButtonPressed(ActionEvent actionEvent) {
-        resetArm();
-        //TODO
+    private void setPermutationNumber(int n){
+        this.iterationAmount.setText(String.valueOf(n));
+    }
+
+    private void fillIterationChooser(Conflict first) {
+        ObservableList itNumbers = FXCollections.observableArrayList();
+
+        for(int i=1; i<=first.getConflictPermutationNumber(); i++){
+            itNumbers.add("Iteration #" + i);
+        }
+
+        this.iterationChooser.setItems(itNumbers);
+
+        if(itNumbers.size() != 0)
+            iterationChooser.setValue(itNumbers.get(0));
+    }
+
+    private void fillIterationView(Conflict c, int n){
+        ObservableList list = FXCollections.observableArrayList();
+        int length = c.getConflictPermutationNumber();
+
+        List<Conflict> circle = c.getCircle(c.getConstraints().get(0));
+
+        assert (n <= length);
+        for(int i=n; i<length; i++)
+            list.add(circle.get(i));
+        for(int i=0; i<n; i++)
+            list.add(circle.get(i));
+
+
+        this.iterationView.setItems(list);
+    }
+
+    public void chooseIteration(ActionEvent actionEvent) {
+        String value = this.iterationChooser.getValue().toString();
+        value = value.split("#")[1];
+        int n = Integer.valueOf(value);
+
+        fillIterationView(currentConflict, n); //TODO: use currently selected conflict
     }
 }
