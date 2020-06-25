@@ -196,11 +196,11 @@ public class MainFrameController {
         //Generating an artificial conflict for testing purpose
         //TODO: remove this section after testing
         List<Constraint> conflicts = new LinkedList<Constraint>();
-        Cavity a = new Cavity("a", 0, 0, 0,0,0);
-        Cavity b = new Cavity("b", 0, 0, 0,0,0);
-        Cavity c = new Cavity("c", 0, 0, 0,0,0);
-        Cavity d = new Cavity("d", 0, 0, 0,0,0);
-        Cavity f = new Cavity("f", 0, 0, 0,0,0);
+        Cavity a = new Cavity("a", 132, 420, 0,0,0);
+        Cavity b = new Cavity("b", 128, 347, 0,0,0);
+        Cavity c = new Cavity("c", 426, 597, 0,0,0);
+        Cavity d = new Cavity("d", 216, 460, 0,0,0);
+        Cavity f = new Cavity("f", 28, 601, 0,0,0);
 
         conflicts.add(new BlockingConstraint(a, b, null));
         conflicts.add(new BlockingConstraint(b, f, null));

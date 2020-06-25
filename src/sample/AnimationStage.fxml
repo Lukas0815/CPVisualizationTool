@@ -19,7 +19,7 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                <children>
                   <Label text="Conflict" />
-                  <ChoiceBox fx:id="conflictChooser" prefWidth="150.0" />
+                  <ChoiceBox fx:id="conflictChooser" prefWidth="150.0" onAction="#chooseConflict"/>
                </children>
             </HBox>
             <ListView fx:id="conflictView" prefHeight="200.0" prefWidth="200.0">

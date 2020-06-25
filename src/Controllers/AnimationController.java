@@ -2,22 +2,26 @@ package Controllers;
 
 import CableTree.CableTree;
 import Constraints.Conflict;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import Constraints.Constraint;
+import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import CableTree.Position;
 
 public class AnimationController {
 
@@ -39,9 +43,16 @@ public class AnimationController {
     private final double animationTime = 1000;
     private List<Conflict> conflicts;
     private Conflict currentConflict;
+    private LinkedList<Constraint> currentIteration;
+    private int iterationCount;
+    private Constraint toAnimate;
+
 
     public static CableTree cableTree;
 
+    public void AnimationController(){
+
+    }
 
     public void initialize(){
         //fill conflict chooser
@@ -77,9 +88,6 @@ public class AnimationController {
 
         this.roboArm = spawnArm(armDefaultX, armDefaultY, this.animationPane);
 
-        //testing
-        moveArm(400,400);
-
     }
 
     public void prevButtonPressed(ActionEvent actionEvent) {
@@ -87,7 +95,44 @@ public class AnimationController {
     }
 
     public void nextButtonPressed(ActionEvent actionEvent) {
-        //TODO
+        //start from beginning again
+        if (currentIteration.size() >= iterationCount){
+            iterationCount = 0;
+        }
+
+        this.toAnimate = currentIteration.get(iterationCount);
+
+        Position pos1 = toAnimate.getSource().getPos();
+        Position pos2 = toAnimate.getAffected().getPos();
+        /*
+
+        resetArm();
+
+
+        moveArm(pos1.getX(), pos1.getY());
+
+        resetArm();
+
+
+        moveArm(pos2.getX(), pos2.getY());
+
+
+        resetArm();
+
+
+         */
+
+        SequentialTransition st = new SequentialTransition();
+        st.getChildren().add(resetArm2());
+        st.getChildren().add(moveArm2(pos1.getX(), pos1.getY()));
+        st.getChildren().add(resetArm2());
+        st.getChildren().add(moveArm2(pos2.getX(), pos2.getY()));
+
+        st.play();
+
+        moveArm2(400, 400).play();
+
+        iterationCount++;
     }
 
     private Rectangle spawnArm(double x, double y, Pane drawPane){
@@ -107,7 +152,7 @@ public class AnimationController {
     /*
     Moves roboter arm back to its resting position specified by (armDefaultX, armDefaultY)
      */
-    private void resetArm(){
+    private Timeline resetArm(){
 
         //Build up animation t1 - moving back on x axis
         KeyFrame horizontal = new KeyFrame(Duration.millis(animationTime),
@@ -116,6 +161,7 @@ public class AnimationController {
         Timeline t1 = new Timeline();
         t1.getKeyFrames().add(horizontal);
         t1.setCycleCount(1);
+
 
         //Build up animation t2 - moving back on y axis
         KeyFrame vertical = new KeyFrame(Duration.millis(animationTime),
@@ -133,8 +179,41 @@ public class AnimationController {
             }
         });
 
+
         //execute animation
         t1.play();
+        return t2;
+    }
+
+    private PathTransition resetArm2(){
+
+        Path path = new Path();
+        path.getElements().add(new MoveTo(this.armDefaultX, this.roboArm.getY()));
+        path.getElements().add(new MoveTo(this.armDefaultX, this.armDefaultY));
+
+        PathTransition pathTransition = new PathTransition();
+        pathTransition.setDuration(Duration.millis(3000));
+        pathTransition.setPath(path);
+        pathTransition.setNode(this.roboArm);
+
+        return pathTransition;
+    }
+
+    private PathTransition moveArm2(double x, double y) {
+
+        Path path = new Path();
+        path.getElements().add(new MoveTo(y, this.armDefaultY));
+        path.getElements().add(new MoveTo(x, y));
+
+        PathTransition pathTransition = new PathTransition();
+        pathTransition.setDuration(Duration.millis(1000));
+        pathTransition.setPath(path);
+        pathTransition.setNode(this.roboArm);
+        pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+        pathTransition.setCycleCount(50);
+        pathTransition.setAutoReverse(false);
+
+        return pathTransition;
     }
 
     private void moveArm(double x, double y){
@@ -151,12 +230,14 @@ public class AnimationController {
         Timeline horizontalTime = new Timeline();
         horizontalTime.getKeyFrames().add(horizontal);
 
+
         verticalTime.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 horizontalTime.play();
             }
         });
+
 
         verticalTime.play();
     }
@@ -195,6 +276,7 @@ public class AnimationController {
         for(int i=0; i<n; i++)
             list.add(circle.get(i));
 
+        this.currentIteration = new LinkedList(list);
 
         this.iterationView.setItems(list);
     }
@@ -204,6 +286,18 @@ public class AnimationController {
         value = value.split("#")[1];
         int n = Integer.valueOf(value);
 
-        fillIterationView(currentConflict, n); //TODO: use currently selected conflict
+        fillIterationView(currentConflict, n);
+        this.iterationCount = 0;
     }
+
+    public void chooseConflict(ActionEvent actionEvent) {
+        String value = this.conflictChooser.getValue().toString();
+
+        for (Conflict c: conflicts){
+            if (c.getName().equals(value))
+                this.currentConflict = c;
+        }
+    }
+
+
 }
