@@ -87,7 +87,7 @@
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <ListView fx:id="constraintList" prefHeight="200.0" prefWidth="200.0" />
+                              <ListView fx:id="constraintList" prefHeight="500.0" prefWidth="200.0" />
                               <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
                                 <buttons>
                                     <Button mnemonicParsing="false" text="edit/delete" />

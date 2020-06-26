@@ -26,8 +26,10 @@ public class XMLParser {
     private DocumentBuilder dBuilder;
     private Document doc;
     private HashMap<String, Housing> housingMap;
+    private List<Cavity> activeCavities;
 
     public XMLParser(String path){
+        this.activeCavities = new LinkedList<Cavity>();
         this.housingMap = new HashMap<String, Housing>();
         this.xmlpath = path;
         this.fXmlFile = new File(path);
@@ -57,7 +59,7 @@ public class XMLParser {
         List<Wire> wires = parseCables();
         //TODO: error handling if null is returned!
 
-        return new CableTree(palette, housings, cavities, wires);
+        return new CableTree(palette, housings, cavities, wires, this.activeCavities);
     }
 
     /*
@@ -203,6 +205,9 @@ public class XMLParser {
                     endCavity.setActive(true);
                     Wire w = new Wire(length, type, startCavity, endCavity);
                     wireList.add(w);
+
+                    this.activeCavities.add(startCavity);
+                    this.activeCavities.add(endCavity);
                 }
 
 

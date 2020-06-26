@@ -23,7 +23,7 @@ public class CableTree {
     private String xmlPath;
 
     private List<Housing> housings;
-    private List<Cavity> cavities;
+    private List<Cavity> cavities, activeCavities;
     private List<Wire> wires;
     private Palette palette;
     private List<Shape> heats;
@@ -33,17 +33,19 @@ public class CableTree {
     private Map<Cavity, Integer> cavFreqMap;
     private List<Conflict> conflicts;
 
-    public CableTree(Palette palette, List<Housing> housings, List<Cavity> cavities, List<Wire> wires){
+    public CableTree(Palette palette, List<Housing> housings, List<Cavity> cavities, List<Wire> wires, List<Cavity> activeCavities){
         this.palette = palette;
         this.housings = housings;
         this.cavities = cavities;
         this.wires = wires;
         this.colorScheme = new ColorScheme();
         this.heatmapPrintFlags = new boolean[5];
-        this.constraints = computeConstraints();
 
         this.cavFreqMap = new HashMap();
         this.conflicts = new LinkedList<>();
+        this.activeCavities = activeCavities;
+
+        this.constraints = computeConstraints();
         makeFreqMap();
     }
 
@@ -90,7 +92,7 @@ public class CableTree {
     private List<Shape> computeDiagonallyClose() {
         List<Shape> areas = new LinkedList<>();
 
-        for (Cavity c : cavities){
+        for (Cavity c : activeCavities){
             Rectangle rec = c.getDiagonallyCloseArea();
 
             rec.setOpacity(colorScheme.getHeatOpacity());
@@ -113,7 +115,7 @@ public class CableTree {
     public List<Shape> computeBlockingAreas(Palette p){
         List<Shape> areas = new LinkedList<>();
 
-        for (Cavity c : cavities){
+        for (Cavity c : activeCavities){
             //We will use a polygon to show the affected area by the blocking constraint
             Shape blockArea = c.getBlockingArea(p);
 
@@ -150,7 +152,7 @@ public class CableTree {
     public List<Shape> computeChamberTripletAreas(){
         List<Shape> areas = new LinkedList<>();
 
-        for (Cavity c: cavities){
+        for (Cavity c: activeCavities){
             Rectangle rec = c.getChamberTripletArea();
 
             rec.setFill(colorScheme.getChamberColor());
@@ -179,19 +181,15 @@ public class CableTree {
         List<Constraint> constraints = new LinkedList<>();
 
         //blocking constraints
-        for (Cavity source : cavities){
-            //Only check for used cavities
-           /* if (!source.getActive())
-                continue;
-             */
+        for (Cavity source : activeCavities){
 
-            for (Cavity c : cavities){
-                //if (!c.getActive()) continue;
+            for (Cavity c : activeCavities){
+
                 if (source.equals(c)) continue; //Do not compare with itself!
-                if (c.getPos().getY() > source.getPos().getY()) continue; //Optimization, since only cavities below are blocked
+                //if (c.getPos().getY() > source.getPos().getY()) continue; //Optimization, since only cavities below are blocked
 
                 //at the moment checks for the cavity point (middle point) --> TODO: check if a whole rectangle needs to be checked instead of point
-                boolean isAffected = source.getBlockingArea(palette).contains(c.getMiddlePoint());
+                boolean isAffected = source.getBlockingArea(palette).intersects(c.getPos().getX(), c.getPos().getY(), 1, 1); //.contains(c.getMiddlePoint());
 
                 if (isAffected){
                     constraints.add(new BlockingConstraint(source, c, null));
@@ -200,9 +198,9 @@ public class CableTree {
         }
 
         //diagonally close constraints
-        for (Cavity source : cavities){
-            for (Cavity c : cavities){
-                boolean isAffected = source.getDiagonallyCloseArea().contains(c.getMiddlePoint());
+        for (Cavity source : activeCavities){
+            for (Cavity c : activeCavities){
+                boolean isAffected = source.getDiagonallyCloseArea().intersects(c.getMiddlePoint().getX(), c.getMiddlePoint().getY(), 1, 1);
 
                 if (isAffected){
                     constraints.add(new DiagonallyCloseConstraint(source, c, null));
@@ -216,8 +214,8 @@ public class CableTree {
             if (w.getLength() > Parameters.shortL) continue; //only respect short cables
             Cavity source = w.getCavities()[0];
 
-            for (Cavity c : cavities){
-                boolean isAffected = source.getShortOneSidedArea(w).contains(c.getMiddlePoint());
+            for (Cavity c : activeCavities){
+                boolean isAffected = source.getShortOneSidedArea(w).intersects(c.getMiddlePoint().getX(), c.getMiddlePoint().getY(), 1, 1);
 
                 if (isAffected){
                     constraints.add(new ShortOneSidedConstraint(source, c, w));
@@ -295,5 +293,9 @@ public class CableTree {
 
     public Palette getPalette(){
         return palette;
+    }
+
+    public List<Cavity> getActiveCavs(){
+        return this.activeCavities;
     }
 }
