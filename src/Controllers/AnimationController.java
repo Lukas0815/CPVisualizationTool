@@ -46,6 +46,8 @@ public class AnimationController {
     private LinkedList<Constraint> currentIteration;
     private int iterationCount;
     private Constraint toAnimate;
+    private double width, height;
+    private EventHandler<ActionEvent> adjustPosition;
 
 
     public static CableTree cableTree;
@@ -55,6 +57,13 @@ public class AnimationController {
     }
 
     public void initialize(){
+        this.width = cableTree.getPalette().getWidth();
+        this.height = cableTree.getPalette().getHeight();
+        this.armDefaultX = width - 50;
+        this.armDefaultY = height / 2;
+
+        this.animationPane.setPrefSize(width, height);
+
         //fill conflict chooser
         ObservableList conflictList = FXCollections.observableArrayList();
         this.conflicts = cableTree.getConflicts();
@@ -83,11 +92,7 @@ public class AnimationController {
 
 
     public void animateAll(ActionEvent actionEvent) {
-        this.armDefaultX = this.animationPane.getWidth() - 50;
-        this.armDefaultY = this.animationPane.getHeight() /2;
-
         this.roboArm = spawnArm(armDefaultX, armDefaultY, this.animationPane);
-
     }
 
     public void prevButtonPressed(ActionEvent actionEvent) {
@@ -104,33 +109,14 @@ public class AnimationController {
 
         Position pos1 = toAnimate.getSource().getPos();
         Position pos2 = toAnimate.getAffected().getPos();
-        /*
-
-        resetArm();
-
-
-        moveArm(pos1.getX(), pos1.getY());
-
-        resetArm();
-
-
-        moveArm(pos2.getX(), pos2.getY());
-
-
-        resetArm();
-
-
-         */
 
         SequentialTransition st = new SequentialTransition();
-        st.getChildren().add(resetArm2());
-        st.getChildren().add(moveArm2(pos1.getX(), pos1.getY()));
-        st.getChildren().add(resetArm2());
-        st.getChildren().add(moveArm2(pos2.getX(), pos2.getY()));
+        moveArm(pos1.getX(), pos1.getY(), st);
+        resetArm(st);
+        moveArm(pos2.getX(), pos2.getY(), st);
+        resetArm(st);
 
         st.play();
-
-        moveArm2(400, 400).play();
 
         iterationCount++;
     }
@@ -152,7 +138,7 @@ public class AnimationController {
     /*
     Moves roboter arm back to its resting position specified by (armDefaultX, armDefaultY)
      */
-    private Timeline resetArm(){
+    private void resetArm(SequentialTransition st){
 
         //Build up animation t1 - moving back on x axis
         KeyFrame horizontal = new KeyFrame(Duration.millis(animationTime),
@@ -171,52 +157,12 @@ public class AnimationController {
         t2.getKeyFrames().add(vertical);
         t2.setCycleCount(1);
 
-        //specify that animation t2 is played only after t1 has finished
-        t1.setOnFinished(new EventHandler<ActionEvent>()  {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                t2.play();
-            }
-        });
 
-
-        //execute animation
-        t1.play();
-        return t2;
+        //add animation
+        st.getChildren().addAll(t1,t2);
     }
 
-    private PathTransition resetArm2(){
-
-        Path path = new Path();
-        path.getElements().add(new MoveTo(this.armDefaultX, this.roboArm.getY()));
-        path.getElements().add(new MoveTo(this.armDefaultX, this.armDefaultY));
-
-        PathTransition pathTransition = new PathTransition();
-        pathTransition.setDuration(Duration.millis(3000));
-        pathTransition.setPath(path);
-        pathTransition.setNode(this.roboArm);
-
-        return pathTransition;
-    }
-
-    private PathTransition moveArm2(double x, double y) {
-
-        Path path = new Path();
-        path.getElements().add(new MoveTo(y, this.armDefaultY));
-        path.getElements().add(new MoveTo(x, y));
-
-        PathTransition pathTransition = new PathTransition();
-        pathTransition.setDuration(Duration.millis(1000));
-        pathTransition.setPath(path);
-        pathTransition.setNode(this.roboArm);
-        pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pathTransition.setCycleCount(50);
-        pathTransition.setAutoReverse(false);
-
-        return pathTransition;
-    }
-
-    private void moveArm(double x, double y){
+    private void moveArm(double x, double y, SequentialTransition st){
 
         KeyFrame vertical = new KeyFrame(Duration.millis(animationTime),
                 new KeyValue(this.roboArm.translateYProperty(), y - roboArm.getY()));
@@ -230,16 +176,8 @@ public class AnimationController {
         Timeline horizontalTime = new Timeline();
         horizontalTime.getKeyFrames().add(horizontal);
 
-
-        verticalTime.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                horizontalTime.play();
-            }
-        });
-
-
-        verticalTime.play();
+        //add animation
+        st.getChildren().addAll(verticalTime, horizontalTime);
     }
 
     private void fillConflictView(Conflict c){

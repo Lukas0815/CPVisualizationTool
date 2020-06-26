@@ -292,4 +292,8 @@ public class CableTree {
     public List<Conflict> getConflicts(){
         return this.conflicts;
     }
+
+    public Palette getPalette(){
+        return palette;
+    }
 }
