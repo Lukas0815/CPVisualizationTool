@@ -200,7 +200,9 @@ public class CableTree {
         //diagonally close constraints
         for (Cavity source : activeCavities){
             for (Cavity c : activeCavities){
-                boolean isAffected = source.getDiagonallyCloseArea().intersects(c.getMiddlePoint().getX(), c.getMiddlePoint().getY(), 1, 1);
+                if (source.equals(c)) continue; //Do not compare with itself!
+
+                boolean isAffected = source.getDiagonallyCloseArea().intersects(c.getPos().getX(), c.getPos().getY(), 1, 1);
 
                 if (isAffected){
                     constraints.add(new DiagonallyCloseConstraint(source, c, null));
@@ -215,7 +217,7 @@ public class CableTree {
             Cavity source = w.getCavities()[0];
 
             for (Cavity c : activeCavities){
-                boolean isAffected = source.getShortOneSidedArea(w).intersects(c.getMiddlePoint().getX(), c.getMiddlePoint().getY(), 1, 1);
+                boolean isAffected = source.getShortOneSidedArea(w).intersects(c.getPos().getX(), c.getPos().getY(), 1, 1);
 
                 if (isAffected){
                     constraints.add(new ShortOneSidedConstraint(source, c, w));
@@ -227,6 +229,8 @@ public class CableTree {
         //Critical Distance
         for (Cavity source : cavities){
             for (Cavity c : cavities){
+                if (source.equals(c)) continue; //Do not compare with itself!
+
                 boolean isAffected = source.getDiagonallyCloseArea().contains(c.getMiddlePoint());
 
                 if (isAffected){
