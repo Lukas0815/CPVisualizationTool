@@ -94,4 +94,9 @@ public class Conflict {
     public int getConflictPermutationNumber(){
         return this.circle.size();
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

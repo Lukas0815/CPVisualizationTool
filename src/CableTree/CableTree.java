@@ -225,22 +225,36 @@ public class CableTree {
             }
 
         }
-/*
-        //Critical Distance
-        for (Cavity source : cavities){
-            for (Cavity c : cavities){
-                if (source.equals(c)) continue; //Do not compare with itself!
 
-                boolean isAffected = source.getDiagonallyCloseArea().contains(c.getMiddlePoint());
 
-                if (isAffected){
-                    constraints.add(new CriticalDistanceConstraint(source, c, null));
+        //Chamber Triplet constraints
+        for (Cavity source : activeCavities){
+            Shape affectedArea = source.getChamberTripletArea();
+            int count = 0;
+            List<Cavity> affectedCavs = new LinkedList<Cavity>();
+
+            for (Cavity c : activeCavities){
+                if (source.equals(c)) continue; //Do not compare with oneself
+
+                //if (affectedArea.intersects(c.getPos().getX(), c.getPos().getY(), 1, 1)){
+                if (affectedArea.intersects(c.getMiddlePoint().getX(), c.getMiddlePoint().getY(), 1, 1)){
+                    count++;
+                    affectedCavs.add(c);
+                }
+
+                if (count >= 2){
+                    constraints.add(new ChamberTripletConstraint(source, affectedCavs.get(0), affectedCavs.get(1)));
+                    //Constraint found, start search for next cavity
+                    break;
                 }
             }
         }
 
+        //Critical Distance
+        //TODO
 
- */
+        //Direct Successor
+        //TODO
 
         return constraints;
     }
@@ -302,4 +316,5 @@ public class CableTree {
     public List<Cavity> getActiveCavs(){
         return this.activeCavities;
     }
+
 }

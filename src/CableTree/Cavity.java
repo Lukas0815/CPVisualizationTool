@@ -172,11 +172,10 @@ public class Cavity {
         Rectangle rec = new Rectangle();
 
         //compute the points
-        rec.setX(getPos().getX() + getWidth()/2 - Parameters.blockingH);
-        rec.setY(getPos().getY() + getHeight()/2);
-        //TODO: the height is not the correct parameter for chamber triplet
-        rec.setWidth(Parameters.blockingH * 2);
-        rec.setHeight(Parameters.blockingH);
+        rec.setX(this.getPos().getX() + getWidth()/2 - Parameters.chamberH);
+        rec.setY(this.getPos().getY() + getHeight()/2);
+        rec.setWidth(Parameters.chamberH * 2);
+        rec.setHeight(Parameters.chamberH);
 
         return rec;
     }

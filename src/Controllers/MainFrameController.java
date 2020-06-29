@@ -7,9 +7,11 @@ import Constraints.Constraint;
 import Input.ColorScheme;
 import Input.DatParser;
 import Input.XMLParser;
+import com.sun.javafx.scene.SceneEventDispatcher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,6 +26,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import sample.MainGUI;
 import CableTree.DatRepresentation;
 
@@ -60,6 +63,8 @@ public class MainFrameController {
     private CheckBox blockingDrawCheck, diagonalDrawCheck, shortDrawCheck, criticalDrawCheck, directSuccDrawCheck, chamberDrawCheck;
     @FXML
     private ListView constraintList;
+    @FXML
+    private ChoiceBox conflictChooser;
 
     private CableTree cableTree;
 
@@ -118,6 +123,12 @@ public class MainFrameController {
 
         //Fill ListView with constraint representations
         updateConstraintView();
+
+        //fill conflict chooser
+        ObservableList conflictList = FXCollections.observableList(List.copyOf(cableTree.getConflicts()));
+        this.conflictChooser.setItems(conflictList);
+        if (conflictList.size() != 0)
+            this.conflictChooser.setValue(conflictList.get(0));
     }
 
     public void updateConstraintView(){
@@ -388,5 +399,66 @@ public class MainFrameController {
         //TODO
 
 
+    }
+
+    public void addConflictClicked(ActionEvent actionEvent) {
+        try{
+            ConflictController.cableTree = this.cableTree;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = loader.load(getClass().getResource("../sample/addConflict.fxml"));
+
+
+            Scene pScene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Conflict menu");
+            stage.setScene(pScene);
+
+            //user can only interact with properties window if opened
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(MainGUI.MainStage);
+
+            stage.show();
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void updateConflictChooser() {
+        //List<Conflict> list = cableTree.getConflicts();
+        this.conflictChooser.setItems(FXCollections.emptyObservableList());
+        this.conflictChooser.setItems(FXCollections.observableList(this.cableTree.getConflicts()));
+
+    }
+
+    public void editConflictButton(ActionEvent actionEvent) {
+        try{
+            EditConflictController.cableTree = this.cableTree;
+            FXMLLoader loader = new FXMLLoader();
+            Parent root = loader.load(getClass().getResource("../sample/editConflict.fxml"));
+
+
+            Scene pScene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Conflict editor");
+            stage.setScene(pScene);
+
+            //user can only interact with properties window if opened
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(MainGUI.MainStage);
+
+            stage.show();
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteConflictClicked(ActionEvent actionEvent) {
+        Conflict c = (Conflict) this.conflictChooser.getValue();
+        if (c != null)
+            this.cableTree.getConflicts().remove(c);
+
+        this.updateConflictChooser();
     }
 }

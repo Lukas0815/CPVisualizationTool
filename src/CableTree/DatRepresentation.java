@@ -2,10 +2,7 @@ package CableTree;
 
 import Constraints.Constraint;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -13,6 +10,7 @@ public class DatRepresentation {
 
     private List<String> atomics, softAtomics, disjunctives, directSuccs;
     private List<String> allConstraints;
+    private Set cavReprs;
     private int k, b;
     private Map<String, Integer> cavFreqMap;
 
@@ -30,6 +28,8 @@ public class DatRepresentation {
         this.allConstraints.addAll(this.disjunctives);
         //TODO: convert directs first
         //this.allConstraints.addAll(this.directSuccs);
+
+        this.cavReprs = extractFoundCavs();
 
         makeFrequencyMap();
     }
@@ -113,7 +113,7 @@ public class DatRepresentation {
         System.out.println("datCavs: " + datCavs);
 
         //Match via frequency
-        for (Cavity c : cableTree.getCavities()){
+        for (Cavity c : cableTree.getActiveCavs()){
             int amount = cavFreqCT.get(c);
             List<String> datRepr = datCavs.get(amount);
 
@@ -125,6 +125,7 @@ public class DatRepresentation {
 
             if (datRepr.size() == 1){
                 c.setReprStr(datRepr.get(0));
+                System.out.println("Repr found " + datRepr.get(0));
             } else {
                 //multiple cavities have are used this often in the constraints --> perform extra matching
                 //Save these cases for further investigation afterwards
@@ -136,12 +137,15 @@ public class DatRepresentation {
         //Check if everything has been matched
         if (mCavs.isEmpty()) return true;
 
-        List<String> result = new LinkedList<>();
+/*        List<String> result = new LinkedList<>();
 
         //Match constraints that could not be matched by taking constraints into account
         for (Constraint c : cableTree.getConstraints()){
             //only consider constraints where cavity is unclear
             if (c.getSource().getReprStr() != null && c.getAffected().getReprStr() != null)
+                continue;
+
+            if (c.getSource().getReprStr() == null && c.getAffected().getReprStr() == null)
                 continue;
 
             if (c.getSource().getReprStr() == null){
@@ -196,9 +200,20 @@ public class DatRepresentation {
             }
         }
 
-
+*/
 
         return false;
+    }
+
+    private void matchViaConstraints(CableTree ct){
+
+
+
+    }
+
+    private Set extractFoundCavs(){
+
+        return null;
     }
 
     private static Map<Integer, List<String>> createReprMap(Map<String, Integer> map) {
@@ -206,10 +221,13 @@ public class DatRepresentation {
         Map<Integer, List<String>> inv = new HashMap<Integer, List<String>>();
 
         for (Entry<String, Integer> entry : map.entrySet())
-            if (inv.containsKey(entry.getValue()))
+            if (inv.containsKey(entry.getValue())){
                 inv.get(entry.getValue()).add(entry.getKey());
-            else
-                inv.put(entry.getValue(), List.of(entry.getKey()));
+            } else {
+                LinkedList<String> entryList = new LinkedList<String>();
+                entryList.add(entry.getKey());
+                inv.put(entry.getValue(), entryList);
+            }
 
         return inv;
     }

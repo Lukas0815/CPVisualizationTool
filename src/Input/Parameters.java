@@ -10,4 +10,6 @@ public class Parameters {
     //Short one-sided cable
     public static int shortAngle = 10;
     public static int shortL = 7000;
+    //Chamber Triplet
+    public static int chamberH = 25;
 }

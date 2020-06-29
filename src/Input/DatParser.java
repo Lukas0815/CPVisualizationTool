@@ -52,20 +52,24 @@ public class DatParser {
                 continue;
             }
 
-            if (s.contains("SoftAtomicConstraints")){
+/*            if (s.contains("SoftAtomicConstraints")){
                 ct = constraintType.SoftAtomic;
                 continue;
             }
+
+ */
 
             if (s.contains("DisjunctiveConstraints")){
                 ct = constraintType.Disjunctive;
                 continue;
             }
 
-            if (s.contains("Successor")){
+/*            if (s.contains("Successor")){
                 ct = constraintType.DirectSucc;
                 continue;
             }
+
+ */
 
             //Parse actual constraints
             if (!s.contains("<") && ct != constraintType.DirectSucc) continue;

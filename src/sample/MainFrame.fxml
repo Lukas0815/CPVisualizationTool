@@ -60,7 +60,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <ChoiceBox prefWidth="150.0">
+                                    <ChoiceBox prefWidth="150.0" fx:id="conflictChooser">
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
@@ -68,12 +68,13 @@
                                           <Insets right="50.0" />
                                        </HBox.margin>
                                     </ChoiceBox>
-                                    <Button mnemonicParsing="false" text="add">
+                                    <Button mnemonicParsing="false" text="add" fx:id="addConflictButton" onAction="#addConflictClicked">
                                        <HBox.margin>
                                           <Insets right="10.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" text="delete" />
+                                    <Button mnemonicParsing="false" text="delete" onAction="#deleteConflictClicked"/>
+                                     <Button mnemonicParsing="false" text="edit" onAction="#editConflictButton"/>
                                  </children>
                                  <VBox.margin>
                                     <Insets />
