@@ -1,6 +1,8 @@
 package Constraints;
 
 import CableTree.Cavity;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Shape;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -98,5 +100,15 @@ public class Conflict {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public List<Shape> drawCycle(Pane drawPane) {
+        List<Shape> arrows = new LinkedList<>();
+
+        for (Constraint c : this.constraints){
+            arrows.add(c.drawOrderArrow(drawPane));
+        }
+
+        return arrows;
     }
 }

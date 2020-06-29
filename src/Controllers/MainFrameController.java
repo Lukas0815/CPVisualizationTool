@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -33,10 +34,7 @@ import CableTree.DatRepresentation;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -65,11 +63,14 @@ public class MainFrameController {
     private ListView constraintList;
     @FXML
     private ChoiceBox conflictChooser;
+    @FXML
+    private CheckBox cycleCheckBox;
 
     private CableTree cableTree;
+    private Map<Conflict, List<Shape>> cycleMap;
 
     public MainFrameController(){
-
+        this.cycleMap = new HashMap<>();
     }
 
     //Gets called at the beginning. Could be used to load in some graphics on the canvas.
@@ -460,5 +461,24 @@ public class MainFrameController {
             this.cableTree.getConflicts().remove(c);
 
         this.updateConflictChooser();
+    }
+
+    public void toggleCycle(ActionEvent actionEvent) {
+        Conflict c = (Conflict) this.conflictChooser.getValue();
+        List<Shape> arrows = null;
+
+        if (this.cycleCheckBox.isSelected() && c != null){
+            arrows = c.drawCycle(this.drawPane);
+            cycleMap.put(c, arrows);
+            this.drawPane.getChildren().addAll(arrows);
+        } else if (!this.cycleCheckBox.isSelected()){
+
+            List<Shape> conflictArrows = cycleMap.get(c);
+            if (conflictArrows != null && !conflictArrows.isEmpty()){
+                this.drawPane.getChildren().removeAll(conflictArrows);
+            }
+
+        }
+
     }
 }

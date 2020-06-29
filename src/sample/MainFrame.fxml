@@ -60,7 +60,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <ChoiceBox prefWidth="150.0" fx:id="conflictChooser">
+                                    <ChoiceBox fx:id="conflictChooser" prefWidth="150.0">
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
@@ -68,13 +68,13 @@
                                           <Insets right="50.0" />
                                        </HBox.margin>
                                     </ChoiceBox>
-                                    <Button mnemonicParsing="false" text="add" fx:id="addConflictButton" onAction="#addConflictClicked">
+                                    <Button fx:id="addConflictButton" mnemonicParsing="false" onAction="#addConflictClicked" text="add">
                                        <HBox.margin>
                                           <Insets right="10.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" text="delete" onAction="#deleteConflictClicked"/>
-                                     <Button mnemonicParsing="false" text="edit" onAction="#editConflictButton"/>
+                                    <Button mnemonicParsing="false" onAction="#deleteConflictClicked" text="delete" />
+                                     <Button mnemonicParsing="false" onAction="#editConflictButton" text="edit" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -118,7 +118,7 @@
                               <ButtonBar prefHeight="40.0" prefWidth="200.0">
                                  <buttons>
                                     <CheckBox fx:id="heatmapOption" mnemonicParsing="false" onAction="#toggleHeatMap" text="heatmap" />
-                                    <CheckBox mnemonicParsing="false" text="cycle" />
+                                    <CheckBox fx:id="cycleCheckBox" mnemonicParsing="false" text="cycle" onAction="#toggleCycle"/>
                                     <CheckBox mnemonicParsing="false" prefHeight="17.0" prefWidth="97.0" text="pure conflict" />
                                  </buttons>
                                  <VBox.margin>
