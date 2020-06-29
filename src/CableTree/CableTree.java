@@ -68,6 +68,10 @@ public class CableTree {
 
         }
 
+        for (Wire w : wires){
+            w.draw(drawPane);
+        }
+
     }
 
     public void drawHeatMap(Pane drawPane) {
