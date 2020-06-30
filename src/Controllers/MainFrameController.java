@@ -62,11 +62,13 @@ public class MainFrameController {
     private CheckBox blockingDrawCheck, diagonalDrawCheck, shortDrawCheck, criticalDrawCheck,
             directSuccDrawCheck, chamberDrawCheck, wireCheckBox, pureConflictCheckBox;
     @FXML
-    private ListView constraintList;
+    private ListView constraintList, conflictView;
     @FXML
     private ChoiceBox conflictChooser;
     @FXML
     private CheckBox cycleCheckBox;
+    @FXML
+    private ToggleButton toggleDrawOnlySelected;
 
     private CableTree cableTree;
     private Map<Conflict, List<Shape>> cycleMap;
@@ -80,7 +82,7 @@ public class MainFrameController {
     //Gets called at the beginning. Could be used to load in some graphics on the canvas.
     @FXML
     public void initialize(){
-
+        this.conflictView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
     }
 
@@ -515,6 +517,45 @@ public class MainFrameController {
                 c.draw(drawPane, this.cableTree.getPalette(), this.cableTree.getColorScheme());
             else
                 c.hide(drawPane);
+        }
+
+    }
+
+    public void toggleDrawOnlySelected(ActionEvent actionEvent) {
+        if (!this.toggleDrawOnlySelected.isSelected()){
+            Conflict conflict = (Conflict) this.conflictChooser.getValue();
+
+            //wipe drawing of conflict completely
+            for (Constraint c : conflict.getConstraints())
+                c.hide(drawPane);
+        }
+    }
+
+    public void chooseConflict(ActionEvent actionEvent) {
+        Conflict c = (Conflict) this.conflictChooser.getValue();
+
+        ObservableList constraintList = FXCollections.observableList(c.getConstraints());
+        this.conflictView.setItems(constraintList);
+    }
+
+    public void updateConflictSelectionDrawing(MouseEvent mouseEvent) {
+        if (!this.toggleDrawOnlySelected.isSelected())
+            return;
+
+        System.out.println("Now starting to draw!");
+
+        Conflict conflict = (Conflict) this.conflictChooser.getValue();
+
+        //wipe drawing of conflict completely
+        for (Constraint c : conflict.getConstraints())
+            c.hide(drawPane);
+
+        //Get selected constraints
+        ObservableList<Integer> selectedIndices = this.conflictView.getSelectionModel().getSelectedIndices();
+        //Draw the constraints
+        for (Integer i : selectedIndices){
+            Constraint c = (Constraint) conflictView.getItems().get(i);
+            c.draw(drawPane, cableTree.getPalette(), cableTree.getColorScheme());
         }
 
     }

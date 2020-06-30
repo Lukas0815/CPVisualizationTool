@@ -28,7 +28,7 @@ public class BlockingConstraint extends Constraint {
     public void draw(Pane pane, Palette p, ColorScheme cs) {
         Shape blockingSource = super.getSource().getBlockingArea(p);
         Shape blockingAffected = super.getAffected().getBlockingArea(p);
-        Shape wireShape = super.getW().getWireShape();
+        //Shape wireShape = super.getW().getWireShape();
 
         blockingSource.setOpacity(cs.getHeatOpacity());
         blockingSource.setFill(cs.getBlockingColor());
@@ -38,9 +38,9 @@ public class BlockingConstraint extends Constraint {
 
         shapes.add(blockingSource);
         shapes.add(blockingAffected);
-        shapes.add(wireShape);
+        //shapes.add(wireShape);
 
-        pane.getChildren().addAll(blockingSource, blockingAffected, wireShape);
+        pane.getChildren().addAll(blockingSource, blockingAffected/*, wireShapec*/);
     }
 
     @Override

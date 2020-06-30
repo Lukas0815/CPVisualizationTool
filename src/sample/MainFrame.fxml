@@ -15,7 +15,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -60,7 +60,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <ChoiceBox fx:id="conflictChooser" prefWidth="150.0">
+                                    <ChoiceBox fx:id="conflictChooser" prefWidth="150.0" onAction="#chooseConflict">
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
@@ -118,9 +118,9 @@
                               <ButtonBar prefHeight="40.0" prefWidth="200.0">
                                  <buttons>
                                     <CheckBox fx:id="heatmapOption" mnemonicParsing="false" onAction="#toggleHeatMap" text="heatmap" />
-                                    <CheckBox fx:id="cycleCheckBox" mnemonicParsing="false" text="cycle" onAction="#toggleCycle"/>
-                                    <CheckBox fx:id="pureConflictCheckBox" mnemonicParsing="false" prefHeight="17.0" prefWidth="97.0" text="pure conflict" onAction="#togglePureConflict"/>
-                                     <CheckBox fx:id="wireCheckBox" mnemonicParsing="false" text="wires" onAction="#toggleWires" />
+                                    <CheckBox fx:id="cycleCheckBox" mnemonicParsing="false" onAction="#toggleCycle" text="cycle" />
+                                    <CheckBox fx:id="pureConflictCheckBox" mnemonicParsing="false" onAction="#togglePureConflict" prefHeight="17.0" prefWidth="97.0" text="pure conflict" />
+                                     <CheckBox fx:id="wireCheckBox" mnemonicParsing="false" onAction="#toggleWires" text="wires" />
                                  </buttons>
                                  <VBox.margin>
                                     <Insets left="50.0" right="50.0" />
@@ -182,12 +182,16 @@
                                     <Insets />
                                  </VBox.margin>
                               </VBox>
-                              <Label layoutX="165.0" layoutY="107.0" text="pure conflict options">
-                                 <VBox.margin>
-                                    <Insets top="30.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <TreeView layoutX="10.0" layoutY="124.0" prefHeight="200.0" prefWidth="200.0" />
+                              <VBox alignment="CENTER" spacing="20.0">
+                                 <children>
+                                    <Label text="pure conflict options" />
+                                    <ToggleButton fx:id="toggleDrawOnlySelected" mnemonicParsing="false" text="draw Selected" onAction="#toggleDrawOnlySelected" />
+                                    <ListView fx:id="conflictView" prefHeight="200.0" prefWidth="200.0" onMouseClicked="#updateConflictSelectionDrawing"/>
+                                 </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </VBox>
                               <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
                                 <buttons>
                                   <Button mnemonicParsing="false" onAction="#showStatisticsStage" text="Show statistics" />
