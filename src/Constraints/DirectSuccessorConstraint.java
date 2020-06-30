@@ -1,7 +1,10 @@
 package Constraints;
 
 import CableTree.Cavity;
+import CableTree.Palette;
 import CableTree.Wire;
+import Input.ColorScheme;
+import javafx.scene.layout.Pane;
 
 public class DirectSuccessorConstraint extends Constraint{
     public DirectSuccessorConstraint(Cavity s, Cavity a, Wire w) {
@@ -11,5 +14,15 @@ public class DirectSuccessorConstraint extends Constraint{
     @Override
     public String toString() {
         return super.toString() + "\n Direct Successor";
+    }
+
+    @Override
+    public void draw(Pane pane, Palette p, ColorScheme cs) {
+        //TODO
+    }
+
+    @Override
+    public void hide(Pane pane) {
+        //TODO
     }
 }

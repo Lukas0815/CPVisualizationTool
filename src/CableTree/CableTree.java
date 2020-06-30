@@ -67,11 +67,12 @@ public class CableTree {
             }
 
         }
-
+        //Do not draw wires by default, use the toggle option instead --> it gets to clustered very fast
+        /*
         for (Wire w : wires){
             w.draw(drawPane);
         }
-
+        */
     }
 
     public void drawHeatMap(Pane drawPane) {
@@ -109,7 +110,8 @@ public class CableTree {
     }
 
     public void hideHeatMap(Pane drawPane) {
-        drawPane.getChildren().removeAll(this.heats);
+        if (this.heats != null && !this.heats.isEmpty())
+            drawPane.getChildren().removeAll(this.heats);
     }
 
     public ColorScheme getColorScheme() {
@@ -196,7 +198,7 @@ public class CableTree {
                 boolean isAffected = source.getBlockingArea(palette).intersects(c.getPos().getX(), c.getPos().getY(), 1, 1); //.contains(c.getMiddlePoint());
 
                 if (isAffected){
-                    constraints.add(new BlockingConstraint(source, c, null));
+                    constraints.add(new BlockingConstraint(source, c, findWire(source, c)));
                 }
             }
         }
@@ -209,7 +211,7 @@ public class CableTree {
                 boolean isAffected = source.getDiagonallyCloseArea().intersects(c.getPos().getX(), c.getPos().getY(), 1, 1);
 
                 if (isAffected){
-                    constraints.add(new DiagonallyCloseConstraint(source, c, null));
+                    constraints.add(new DiagonallyCloseConstraint(source, c, findWire(source, c)));
                 }
             }
         }
@@ -319,6 +321,30 @@ public class CableTree {
 
     public List<Cavity> getActiveCavs(){
         return this.activeCavities;
+    }
+
+    public List<Shape> getWireShapes(){
+        List<Shape> wireList = new LinkedList<>();
+
+        for (Wire w : wires)
+            wireList.add(w.getWireShape());
+
+        return wireList;
+    }
+
+    private Wire findWire(Cavity a, Cavity b){
+
+        for (Wire w : wires){
+            Cavity first = w.getCavities()[0];
+            Cavity second = w.getCavities()[1];
+
+            if (first.equals(a) && second.equals(b))
+                return w;
+            if (second.equals(a) && first.equals(b))
+                return w;
+        }
+
+        return null;
     }
 
 }

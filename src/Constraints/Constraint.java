@@ -1,8 +1,10 @@
 package Constraints;
 
 import CableTree.Cavity;
+import CableTree.Palette;
 import CableTree.Position;
 import CableTree.Wire;
+import Input.ColorScheme;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import sample.Arrow;
@@ -56,4 +58,8 @@ public abstract class Constraint {
 
         return arrow;
     }
+
+    public abstract void draw(Pane pane, Palette p, ColorScheme cs);
+
+    public abstract void hide(Pane pane);
 }

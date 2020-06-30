@@ -39,6 +39,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import CableTree.Cavity;
+import CableTree.Wire;
 
 
 public class MainFrameController {
@@ -58,7 +59,8 @@ public class MainFrameController {
     @FXML
     private Slider heatOpacitySlider;
     @FXML
-    private CheckBox blockingDrawCheck, diagonalDrawCheck, shortDrawCheck, criticalDrawCheck, directSuccDrawCheck, chamberDrawCheck;
+    private CheckBox blockingDrawCheck, diagonalDrawCheck, shortDrawCheck, criticalDrawCheck,
+            directSuccDrawCheck, chamberDrawCheck, wireCheckBox, pureConflictCheckBox;
     @FXML
     private ListView constraintList;
     @FXML
@@ -68,9 +70,11 @@ public class MainFrameController {
 
     private CableTree cableTree;
     private Map<Conflict, List<Shape>> cycleMap;
+    private List<Shape> wireList;
 
     public MainFrameController(){
         this.cycleMap = new HashMap<>();
+        this.wireList = new LinkedList<>();
     }
 
     //Gets called at the beginning. Could be used to load in some graphics on the canvas.
@@ -206,7 +210,7 @@ public class MainFrameController {
     public void showAnimationStage(ActionEvent actionEvent) {
 
         //Generating an artificial conflict for testing purpose
-        //TODO: remove this section after testing
+        //TODO: remove this section after testing or add housing for further testing?
         List<Constraint> conflicts = new LinkedList<Constraint>();
         Cavity a = new Cavity("a", 132, 420, 0,0,0);
         Cavity b = new Cavity("b", 128, 347, 0,0,0);
@@ -214,16 +218,16 @@ public class MainFrameController {
         Cavity d = new Cavity("d", 216, 460, 0,0,0);
         Cavity f = new Cavity("f", 28, 601, 0,0,0);
 
-        conflicts.add(new BlockingConstraint(a, b, null));
-        conflicts.add(new BlockingConstraint(b, f, null));
-        conflicts.add(new BlockingConstraint(b, c, null));
-        conflicts.add(new BlockingConstraint(c, a, null));
-        conflicts.add(new BlockingConstraint(f, d, null));
+        conflicts.add(new BlockingConstraint(a, b, new Wire(1000, "std", a, b)));
+        conflicts.add(new BlockingConstraint(b, f, new Wire(1000, "std", b, f)));
+        conflicts.add(new BlockingConstraint(b, c, new Wire(1000, "std", b, c)));
+        conflicts.add(new BlockingConstraint(c, a, new Wire(1000, "std", c, a)));
+        conflicts.add(new BlockingConstraint(f, d, new Wire(1000, "std", f, d)));
 
 
-        Conflict conflict = new Conflict(conflicts, "conflict 1");
+        //Conflict conflict = new Conflict(conflicts, "conflict 1");
 
-        this.cableTree.addConflict(conflict);
+        //this.cableTree.addConflict(conflict);
 
         try {
             AnimationController.cableTree = this.cableTree;
@@ -478,6 +482,39 @@ public class MainFrameController {
                 this.drawPane.getChildren().removeAll(conflictArrows);
             }
 
+        }
+
+    }
+
+    public void toggleWires(ActionEvent actionEvent) {
+        //Always clear out previously drawn wires, so nothing gets drawn twice
+        this.drawPane.getChildren().removeAll(wireList);
+
+        //If wires should be drawn, redraw all of them
+        if (this.wireCheckBox.isSelected()){
+            wireList = cableTree.getWireShapes();
+            drawPane.getChildren().addAll(wireList);
+        }
+
+    }
+
+    public void togglePureConflict(ActionEvent actionEvent) {
+
+        //Get conflict to draw
+        Conflict conflict = (Conflict) this.conflictChooser.getValue();
+        if (conflict == null)
+            return;
+
+        //disable heatmap first for clarity
+        this.cableTree.hideHeatMap(drawPane);
+        this.heatmapOption.setSelected(false);
+
+        //begin drawing process
+        for (Constraint c : conflict.getConstraints()){
+            if (this.pureConflictCheckBox.isSelected())
+                c.draw(drawPane, this.cableTree.getPalette(), this.cableTree.getColorScheme());
+            else
+                c.hide(drawPane);
         }
 
     }

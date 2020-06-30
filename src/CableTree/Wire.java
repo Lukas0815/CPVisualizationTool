@@ -36,7 +36,13 @@ public class Wire {
         return cavities;
     }
 
-    public Shape draw(Pane pane) {
+    public void draw(Pane pane) {
+        Path path = getWireShape();
+
+        pane.getChildren().add(path);
+    }
+
+    public Path getWireShape(){
         Path path = new Path();
         Point2D pos1;
         Point2D pos2;
@@ -66,8 +72,6 @@ public class Wire {
 
         path.setStroke(Color.BLACK);
         path.setStrokeWidth(1);
-
-        pane.getChildren().add(path);
 
         return path;
     }

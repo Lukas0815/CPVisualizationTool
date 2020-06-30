@@ -31,6 +31,7 @@ public class StatsController {
 
     public static CableTree cableTree;
 
+    @FXML
     public void initialize(){
         //set up chart data
         ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
@@ -38,11 +39,12 @@ public class StatsController {
 
         Map<Cavity, Integer> freqMap = cableTree.getCavFreqMap();
 
-        for (Cavity c : cableTree.getCavities()){
+        for (Cavity c : cableTree.getActiveCavs()){
             pieData.add(new PieChart.Data(c.toString(), freqMap.get(c)));
             //barChart.getData().add(new XYChart.Series<>(c.toString(), freqMap.get(c)));
             dataSeries.getData().add(new XYChart.Data(c.toString(), freqMap.get(c)));
         }
+
 
         //set up PieChart
         pieChart.setData(pieData);
@@ -72,7 +74,6 @@ public class StatsController {
         }
 
         rankingList.setItems(ranking);
-
     }
 
 

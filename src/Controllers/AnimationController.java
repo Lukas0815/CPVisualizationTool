@@ -72,9 +72,10 @@ public class AnimationController {
 
         conflictChooser.setItems(conflictList);
 
-        //If a conflict exists, fill in all other elements
-        Conflict first = this.conflicts.get(0);
-        if(first != null){
+        if (!conflictList.isEmpty()){
+            //If a conflict exists, fill in all other elements
+            Conflict first = this.conflicts.get(0);
+
             this.currentConflict = first;
             //set choosers default value to first conflict
             conflictChooser.setValue(conflictList.get(0));

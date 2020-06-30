@@ -119,7 +119,8 @@
                                  <buttons>
                                     <CheckBox fx:id="heatmapOption" mnemonicParsing="false" onAction="#toggleHeatMap" text="heatmap" />
                                     <CheckBox fx:id="cycleCheckBox" mnemonicParsing="false" text="cycle" onAction="#toggleCycle"/>
-                                    <CheckBox mnemonicParsing="false" prefHeight="17.0" prefWidth="97.0" text="pure conflict" />
+                                    <CheckBox fx:id="pureConflictCheckBox" mnemonicParsing="false" prefHeight="17.0" prefWidth="97.0" text="pure conflict" onAction="#togglePureConflict"/>
+                                     <CheckBox fx:id="wireCheckBox" mnemonicParsing="false" text="wires" onAction="#toggleWires" />
                                  </buttons>
                                  <VBox.margin>
                                     <Insets left="50.0" right="50.0" />
