@@ -338,7 +338,7 @@ public class CableTree {
         return wireList;
     }
 
-    private Wire findWire(Cavity a, Cavity b){
+    public Wire findWire(Cavity a, Cavity b){
 
         for (Wire w : wires){
             Cavity first = w.getCavities()[0];
@@ -353,4 +353,7 @@ public class CableTree {
         return null;
     }
 
+    public CableStore getCableStore() {
+        return this.cableStore;
+    }
 }

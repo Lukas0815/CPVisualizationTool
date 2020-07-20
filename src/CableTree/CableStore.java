@@ -25,6 +25,12 @@ public class CableStore {
         drawpane.getChildren().remove(this.drawShape);
     }
 
+    public double getX(){
+        return this.x;
+    }
 
+    public double getY(){
+        return this.y;
+    }
 
 }

@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import CableTree.Position;
+import CableTree.CableStore;
 
 public class AnimationController {
 
@@ -52,6 +53,7 @@ public class AnimationController {
     private Constraint toAnimate;
     private double width, height;
     private EventHandler<ActionEvent> adjustPosition;
+    private CableStore cableStore;
 
 
     public static CableTree cableTree;
@@ -61,6 +63,7 @@ public class AnimationController {
     }
 
     public void initialize(){
+        this.cableStore = cableTree.getCableStore();
         this.width = cableTree.getPalette().getWidth();
         this.height = cableTree.getPalette().getHeight();
         this.armDefaultX = width - 50;
@@ -93,6 +96,8 @@ public class AnimationController {
 
 
         cableTree.drawToPanel(animationPane, false);
+
+        this.roboArm = spawnArm(armDefaultX, armDefaultY, this.animationPane);
     }
 
 
@@ -106,7 +111,7 @@ public class AnimationController {
 
     public void nextButtonPressed(ActionEvent actionEvent) {
         //start from beginning again
-        if (currentIteration.size() >= iterationCount){
+        if (currentIteration.size() <= iterationCount){
             iterationCount = 0;
         }
 
@@ -115,15 +120,61 @@ public class AnimationController {
         Position pos1 = toAnimate.getSource().getPos();
         Position pos2 = toAnimate.getAffected().getPos();
 
-        SequentialTransition st = new SequentialTransition();
+/*        SequentialTransition st = new SequentialTransition();
         moveArm(pos1.getX(), pos1.getY(), st);
         resetArm(st);
         moveArm(pos2.getX(), pos2.getY(), st);
         resetArm(st);
 
         st.play();
+ */
+
+        Transition t = animateStep(pos1, pos2, true, false);
+
+        //Draw cable at the end of animation
+        t.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                toAnimate.getW().draw(animationPane);
+            }
+        });
+
 
         iterationCount++;
+    }
+
+    private Transition animateStep(Position pos1, Position pos2, boolean before, boolean useStorage){
+        SequentialTransition st = new SequentialTransition();
+
+        if (!useStorage){
+            moveArm(pos1.getX(), pos1.getY(), st);
+            resetArm(st);
+            moveArm(pos2.getX(), pos2.getY(), st);
+            resetArm(st);
+        }else {
+            if (before){
+                //Move arm to storage first
+                moveArm(cableStore.getX(), cableStore.getY(), st);
+                resetArm(st);
+
+                moveArm(pos1.getX(), pos1.getY(), st);
+                resetArm(st);
+                moveArm(pos2.getX(), pos2.getY(), st);
+                resetArm(st);
+            } else {
+
+                moveArm(pos1.getX(), pos1.getY(), st);
+                moveArm(cableStore.getX(), cableStore.getY(), st);
+                resetArm(st);
+                moveArm(pos2.getX(), pos2.getY(), st);
+                resetArm(st);
+            }
+        }
+
+
+        st.play();
+
+        return st;
     }
 
     private Rectangle spawnArm(double x, double y, Pane drawPane){
