@@ -32,6 +32,7 @@ public class CableTree {
     private List<Constraint> constraints;
     private Map<Cavity, Integer> cavFreqMap;
     private List<Conflict> conflicts;
+    private CableStore cableStore;
 
     public CableTree(Palette palette, List<Housing> housings, List<Cavity> cavities, List<Wire> wires, List<Cavity> activeCavities){
         this.palette = palette;
@@ -47,9 +48,12 @@ public class CableTree {
 
         this.constraints = computeConstraints();
         makeFreqMap();
+
+        this.cableStore = new CableStore(Parameters.zetaCableStorePosition.getX(), Parameters.zetaCableStorePosition.getY());
     }
 
     public void drawToPanel(Pane drawPane, boolean statMode) {
+
         //Draw the pallet first
         palette.draw(drawPane);
 
@@ -73,6 +77,8 @@ public class CableTree {
             w.draw(drawPane);
         }
         */
+
+        this.cableStore.draw(drawPane);
     }
 
     public void drawHeatMap(Pane drawPane) {

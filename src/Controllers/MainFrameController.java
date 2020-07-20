@@ -6,24 +6,29 @@ import Constraints.Conflict;
 import Constraints.Constraint;
 import Input.ColorScheme;
 import Input.DatParser;
+import Input.Parameters;
 import Input.XMLParser;
 import com.sun.javafx.scene.SceneEventDispatcher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -57,7 +62,7 @@ public class MainFrameController {
     @FXML
     private ColorPicker blockingColorPicker, diagonalColorPicker, shortColorPicker, criticalColorPicker, directColorPicker, chamberColorPicker;
     @FXML
-    private Slider heatOpacitySlider;
+    private Slider heatOpacitySlider, zoomSlider;
     @FXML
     private CheckBox blockingDrawCheck, diagonalDrawCheck, shortDrawCheck, criticalDrawCheck,
             directSuccDrawCheck, chamberDrawCheck, wireCheckBox, pureConflictCheckBox;
@@ -83,7 +88,6 @@ public class MainFrameController {
     @FXML
     public void initialize(){
         this.conflictView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
     }
 
     public void addClicked(MouseEvent mouseEvent) {
@@ -120,6 +124,7 @@ public class MainFrameController {
 
         XMLParser parser = new XMLParser(file.getAbsolutePath());
         cableTree = parser.parseXMLFile();
+
 
         //Clear previous drawings
         drawPane.getChildren().clear();
@@ -558,5 +563,16 @@ public class MainFrameController {
             c.draw(drawPane, cableTree.getPalette(), cableTree.getColorScheme());
         }
 
+    }
+
+    public void chooseZoom(MouseEvent mouseEvent) {
+        System.out.println("Adjusting Zoom");
+        //drawPane.scaleXProperty().bind(zoomSlider.valueProperty());
+        //drawPane.scaleYProperty().bind(zoomSlider.valueProperty());
+
+        drawPane.getTransforms().clear();
+
+        Scale scaleTransform = new Scale(zoomSlider.getValue(), zoomSlider.getValue(), 0, 0);
+        drawPane.getTransforms().add(scaleTransform);
     }
 }
