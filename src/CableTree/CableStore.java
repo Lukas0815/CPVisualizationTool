@@ -33,4 +33,7 @@ public class CableStore {
         return this.y;
     }
 
+    public Position getPos() {
+        return new Position(x, y);
+    }
 }

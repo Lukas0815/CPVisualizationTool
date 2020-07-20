@@ -7,8 +7,9 @@ import Input.ColorScheme;
 import javafx.scene.layout.Pane;
 
 public class CriticalDistanceConstraint extends Constraint{
-    public CriticalDistanceConstraint(Cavity s, Cavity a, Wire w) {
-        super(s, a, w);
+    public CriticalDistanceConstraint(Cavity a, Cavity b, Cavity c, Cavity d, Wire w) {
+        //represents NOT(A<B AND C<D)
+        super(a,b,w); //TODO: useless, create real constructor
     }
 
     @Override

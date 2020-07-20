@@ -224,7 +224,7 @@
    <center>
       <ScrollPane fx:id="scrollPane" BorderPane.alignment="CENTER">
          <content>
-            <Pane fx:id="drawPane" prefHeight="3000.0" prefWidth="3000.0" />
+            <Pane fx:id="drawPane"  />
          </content>
       </ScrollPane>
    </center>

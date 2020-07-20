@@ -45,11 +45,11 @@ public class CableTree {
         this.cavFreqMap = new HashMap();
         this.conflicts = new LinkedList<>();
         this.activeCavities = activeCavities;
+        this.cableStore = new CableStore(Parameters.zetaCableStorePosition.getX(), Parameters.zetaCableStorePosition.getY());
 
         this.constraints = computeConstraints();
         makeFreqMap();
 
-        this.cableStore = new CableStore(Parameters.zetaCableStorePosition.getX(), Parameters.zetaCableStorePosition.getY());
     }
 
     public void drawToPanel(Pane drawPane, boolean statMode, boolean drawWires) {
@@ -263,12 +263,77 @@ public class CableTree {
         }
 
         //Critical Distance
-        //TODO
+        /*
+        Implemented according to example in TechTool.pdf
+        TODO: compare with actual constraints in TechTool
+        TODO: do NOT use Blocking and Diagonally Close but make two forms of CriticalDistanceCostraint
+         */
+        for (Wire w : wires){
+            Cavity a = w.getCavities()[0];
+            Cavity b = w.getCavities()[1];
+
+            Shape as = w.getWireShape(a.getPos(), cableStore.getPos());
+            Shape ab = w.getWireShape(a.getPos(), w.getCavities()[1].getPos());
+            Shape bs = w.getWireShape(b.getPos(), cableStore.getPos());
+
+            boolean coversAS, coversAB, coversBS;
+
+            for (Cavity c : activeCavities){
+                coversAS = as.intersects(c.getMiddlePoint().getX(), c.getMiddlePoint().getY(), c.getWidth(), c.getHeight());
+                coversAB = ab.intersects(c.getMiddlePoint().getX(), c.getMiddlePoint().getY(), c.getWidth(), c.getHeight());
+                coversBS = bs.intersects(c.getMiddlePoint().getX(), c.getMiddlePoint().getY(), c.getWidth(), c.getHeight());
+
+               if (coversAS && coversAB && coversBS){
+                   constraints.add(new BlockingConstraint(a, c, w));
+                   constraints.add(new BlockingConstraint(b, c, w));
+               } else if (coversAB && coversAS){
+                   constraints.add(new BlockingConstraint(a, c, w));
+               } else if (coversAB && coversBS){
+                   constraints.add(new BlockingConstraint(b, c, w));
+               } else if (coversAS && coversBS){
+                   constraints.add(new CriticalDistanceConstraint(b, c, c, a, w));
+                   constraints.add(new CriticalDistanceConstraint(a, c, c, b, w));
+               } else if (coversAB) {
+                   constraints.add(new CriticalDistanceConstraint(a, c, b, c, w));
+               } else if (coversAS){
+                   constraints.add(new CriticalDistanceConstraint(a,c,c,b, w));
+               } else if (coversBS){
+                   constraints.add(new CriticalDistanceConstraint(b,c,c,a,w));
+               }
+
+            }
+        }
 
         //Direct Successor
-        //TODO
+        //TODO: adjust position of cable store so that it matches the constraints*
+        for (Wire w : wires){
+            Cavity a = w.getCavities()[0];
+            Cavity b = w.getCavities()[1];
+
+            if (pythagorasDistance(a.getPos(), cableStore.getPos()) < w.getLength()){
+                constraints.add(new DirectSuccessorConstraint(b, a, w));
+            }
+            if (pythagorasDistance(b.getPos(), cableStore.getPos()) < w.getLength()){
+                constraints.add(new DirectSuccessorConstraint(a, b, w));
+            }
+
+        }
 
         return constraints;
+    }
+
+    //Gives distance betweent two points using pythagoras
+    private double pythagorasDistance(Position pos_a, Position pos_b){
+        double ax = pos_a.getX();
+        double ay = pos_a.getY();
+        double bx = pos_b.getX();
+        double by = pos_b.getY();
+
+
+        double a = ax < bx ? bx - ax : ax - bx;
+        double b = ay < by ? by - ay : ay - by;
+
+        return Math.sqrt((a*a) + (b*b));
     }
 
     public List<Constraint> getConstraints() {

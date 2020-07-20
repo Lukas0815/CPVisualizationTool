@@ -43,7 +43,7 @@ public class Wire {
     }
 
     public Path getWireShape(){
-        Path path = new Path();
+
         Point2D pos1;
         Point2D pos2;
 
@@ -54,6 +54,12 @@ public class Wire {
             pos1 = cavities[1].getMiddlePoint();
             pos2 = cavities[0].getMiddlePoint();
         }
+
+       return getWireShape(new Position(pos1.getX(), pos1.getY()), new Position(pos2.getX(), pos2.getY()));
+    }
+
+    public Path getWireShape(Position pos1, Position pos2){
+        Path path = new Path();
 
         double w = pos2.getX() - pos1.getX();
         double curveX = pos1.getX() + 0.5 * w;

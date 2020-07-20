@@ -8,32 +8,17 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.StatsController">
    <bottom>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <PieChart fx:id="pieChart" />
-            <BarChart fx:id="barChart" >
-              <xAxis>
-                <CategoryAxis side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis side="LEFT" />
-              </yAxis>
-            </BarChart>
-            <ListView prefHeight="200.0" prefWidth="200.0" fx:id="rankingList"/>
-         </children>
-      </HBox>
-   </bottom>
-   <right>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" prefWidth="300.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Options">
                <font>
@@ -42,16 +27,42 @@
             </Label>
          </children>
       </VBox>
-   </right>
+   </bottom>
    <center>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" fx:id="scrollPane" >
-        <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" fx:id="drawPane">
-               <children>
-                  <Canvas height="200.0" width="200.0" />
-               </children>
-            </AnchorPane>
-        </content>
-      </ScrollPane>
+      <TabPane BorderPane.alignment="CENTER">
+         <tabs>
+            <Tab text="cable tree">
+               <content>
+                  <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0">
+                    <content>
+                      <AnchorPane fx:id="drawPane" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Canvas height="200.0" width="200.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
+               </content>
+            </Tab>
+             <Tab text="charts">
+                 <HBox alignment="CENTER_LEFT" spacing="50.0" BorderPane.alignment="CENTER">
+                     <children>
+
+                             <PieChart fx:id="pieChart" />
+                             <BarChart fx:id="barChart">
+                                 <xAxis>
+                                     <CategoryAxis side="BOTTOM" />
+                                 </xAxis>
+                                 <yAxis>
+                                     <NumberAxis side="LEFT" />
+                                 </yAxis>
+                             </BarChart>
+
+                         <ListView fx:id="rankingList" prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                 </HBox>
+             </Tab>
+         </tabs>
+      </TabPane>
    </center>
 </BorderPane>
