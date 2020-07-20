@@ -584,7 +584,6 @@ public class MainFrameController {
     }
 
     public void chooseZoom(MouseEvent mouseEvent) {
-        System.out.println("Adjusting Zoom");
         //drawPane.scaleXProperty().bind(zoomSlider.valueProperty());
         //drawPane.scaleYProperty().bind(zoomSlider.valueProperty());
 

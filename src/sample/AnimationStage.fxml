@@ -61,6 +61,14 @@
                   <Insets bottom="20.0" top="20.0" />
                </VBox.margin>
             </Button>
+            <Label text="Zoom">
+               <graphic>
+                  <Slider fx:id="zoomSlider" onMouseClicked="#chooseZoom" min="0" max="1" showTickLabels="true" showTickMarks="true" value="1"/>
+               </graphic>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="20.0" />
+               </VBox.margin>
+            </Label>
          </children>
       </VBox>
    </left>

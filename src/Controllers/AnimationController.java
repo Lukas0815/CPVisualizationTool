@@ -11,11 +11,13 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 import java.util.LinkedList;
@@ -37,6 +39,8 @@ public class AnimationController {
     private Button prevButton, nextButton, animateAllButton;
     @FXML
     private Slider speedSlider;
+    @FXML
+    private Slider zoomSlider;
 
     private Rectangle roboArm;
     private double armDefaultX, armDefaultY;
@@ -239,4 +243,10 @@ public class AnimationController {
     }
 
 
+    public void chooseZoom(MouseEvent mouseEvent) {
+        animationPane.getTransforms().clear();
+
+        Scale scaleTransform = new Scale(zoomSlider.getValue(), zoomSlider.getValue(), 0, 0);
+        animationPane.getTransforms().add(scaleTransform);
+    }
 }
