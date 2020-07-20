@@ -15,7 +15,7 @@ public class Parameters {
     //Chamber Triplet
     public static int chamberH = 25;
 
-    private static int factor = 10;
+    private static int factor = 2;
 
     //CableStorePosition
     public static Position zetaCableStorePosition = new Position(390 * factor, 200 * factor);

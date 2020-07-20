@@ -13,7 +13,7 @@ public class CableStore {
     public CableStore(double x, double y){
         this.x = x;
         this.y = y;
-        this.drawShape = new Circle(x, y, 50);
+        this.drawShape = new Circle(x, y, 10);
         drawShape.setFill(Color.GREEN);
     }
 
