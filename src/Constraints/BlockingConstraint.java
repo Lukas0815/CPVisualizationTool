@@ -40,7 +40,7 @@ public class BlockingConstraint extends Constraint {
         shapes.add(blockingAffected);
         //shapes.add(wireShape);
 
-        pane.getChildren().addAll(blockingSource, blockingAffected/*, wireShapec*/);
+        pane.getChildren().addAll(blockingSource, blockingAffected/*, wireShape*/);
     }
 
     @Override

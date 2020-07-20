@@ -23,6 +23,8 @@ import javafx.util.Duration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.TimeUnit;
+
 import CableTree.Position;
 import CableTree.CableStore;
 
@@ -95,14 +97,19 @@ public class AnimationController {
         conflictChooser.show();
 
 
-        cableTree.drawToPanel(animationPane, false);
+        cableTree.drawToPanel(animationPane, false, true);
 
         this.roboArm = spawnArm(armDefaultX, armDefaultY, this.animationPane);
     }
 
 
-    public void animateAll(ActionEvent actionEvent) {
-        this.roboArm = spawnArm(armDefaultX, armDefaultY, this.animationPane);
+    public void animateAll() {
+        SequentialTransition st = new SequentialTransition();
+        for (int i=0; i<currentIteration.size(); i++){
+            st.getChildren().add(animateNextConstraint(null));
+        }
+
+        st.play();
     }
 
     public void prevButtonPressed(ActionEvent actionEvent) {
@@ -110,6 +117,10 @@ public class AnimationController {
     }
 
     public void nextButtonPressed(ActionEvent actionEvent) {
+        animateNextConstraint(null).play();
+    }
+
+    private Transition animateNextConstraint(EventHandler e){
         //start from beginning again
         if (currentIteration.size() <= iterationCount){
             iterationCount = 0;
@@ -117,30 +128,17 @@ public class AnimationController {
 
         this.toAnimate = currentIteration.get(iterationCount);
 
-        Position pos1 = toAnimate.getSource().getPos();
-        Position pos2 = toAnimate.getAffected().getPos();
+        //highlight the used constraint in the listview
+        this.iterationView.getSelectionModel().clearAndSelect(iterationCount);
 
-/*        SequentialTransition st = new SequentialTransition();
-        moveArm(pos1.getX(), pos1.getY(), st);
-        resetArm(st);
-        moveArm(pos2.getX(), pos2.getY(), st);
-        resetArm(st);
-
-        st.play();
- */
+        Position pos1 = toAnimate.getAffected().getPos();
+        Position pos2 = toAnimate.getSource().getPos();
 
         Transition t = animateStep(pos1, pos2, true, false);
 
-        //Draw cable at the end of animation
-        t.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                toAnimate.getW().draw(animationPane);
-            }
-        });
-
-
         iterationCount++;
+
+        return t;
     }
 
     private Transition animateStep(Position pos1, Position pos2, boolean before, boolean useStorage){
@@ -170,9 +168,6 @@ public class AnimationController {
                 resetArm(st);
             }
         }
-
-
-        st.play();
 
         return st;
     }

@@ -54,7 +54,7 @@ public class StatsController {
         barChart.getData().add(dataSeries);
 
         //set up pallete view where on cavity the number of occurence is displayed
-        cableTree.drawToPanel(drawPane, true);
+        cableTree.drawToPanel(drawPane, true, false);
 
         //fill ranking into ListView
         ObservableList<Integer> cavAmounts = FXCollections.observableArrayList();

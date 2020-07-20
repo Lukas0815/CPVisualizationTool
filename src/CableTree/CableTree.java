@@ -52,7 +52,7 @@ public class CableTree {
         this.cableStore = new CableStore(Parameters.zetaCableStorePosition.getX(), Parameters.zetaCableStorePosition.getY());
     }
 
-    public void drawToPanel(Pane drawPane, boolean statMode) {
+    public void drawToPanel(Pane drawPane, boolean statMode, boolean drawWires) {
 
         //Draw the pallet first
         palette.draw(drawPane);
@@ -71,12 +71,12 @@ public class CableTree {
             }
 
         }
-        //Do not draw wires by default, use the toggle option instead --> it gets to clustered very fast
-        /*
-        for (Wire w : wires){
-            w.draw(drawPane);
+
+        if (drawWires){
+            for (Wire w : wires){
+                w.draw(drawPane);
+            }
         }
-        */
 
         this.cableStore.draw(drawPane);
     }
