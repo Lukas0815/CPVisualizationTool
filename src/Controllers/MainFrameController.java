@@ -137,8 +137,8 @@ public class MainFrameController {
             BlockingConstraint b1 = new BlockingConstraint(cavMap.get("C5PW10A(A):12"), cavMap.get("C5PM26-A(A):2"), cableTree.findWire(cavMap.get("C5PW10A(A):12"), cavMap.get("C5PM26-A(A):2")) );
             BlockingConstraint b2 = new BlockingConstraint(cavMap.get("C5PW10A(A):3"), cavMap.get("C5PM26-A(A):1"), cableTree.findWire(cavMap.get("C5PW10A(A):3"), cavMap.get("C5PM26-A(A):1")));
             DiagonallyCloseConstraint b3 = new DiagonallyCloseConstraint(cavMap.get("C5PW10A(A):5"), cavMap.get("C5PW10A(A):12"), cableTree.findWire(cavMap.get("C5PW10A(A):5"), cavMap.get("C5PW10A(A):12")));
-            DirectSuccessorConstraint d1 = new DirectSuccessorConstraint(cavMap.get("C5PM26-A(A):2"), cavMap.get("C5PW10A(A):3"), cableTree.findWire(cavMap.get("C5PM26-A(A):2"), cavMap.get("C5PW10A(A):3")));
-            DirectSuccessorConstraint d2 = new DirectSuccessorConstraint(cavMap.get("C5PM26-A(A):1"), cavMap.get("C5PW10A(A):5"), cableTree.findWire(cavMap.get("C5PM26-A(A):1"), cavMap.get("C5PW10A(A):5")));
+            DirectSuccessorConstraint d1 = new DirectSuccessorConstraint(cavMap.get("C5PM26-A(A):2"), cavMap.get("C5PW10A(A):3"), cableTree.findWire(cavMap.get("C5PM26-A(A):2"), cavMap.get("C5PW10A(A):3")), cableTree.getCableStore().getPos());
+            DirectSuccessorConstraint d2 = new DirectSuccessorConstraint(cavMap.get("C5PM26-A(A):1"), cavMap.get("C5PW10A(A):5"), cableTree.findWire(cavMap.get("C5PM26-A(A):1"), cavMap.get("C5PW10A(A):5")), cableTree.getCableStore().getPos());
 
             Conflict conflict = new Conflict(Arrays.asList(b1, b2, b3, d1, d2), "circleTest");
             cableTree.addConflict(conflict);

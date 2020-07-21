@@ -4,6 +4,7 @@ import Constraints.*;
 import Input.ColorScheme;
 import Input.Parameters;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
@@ -40,7 +41,7 @@ public class CableTree {
         this.cavities = cavities;
         this.wires = wires;
         this.colorScheme = new ColorScheme();
-        this.heatmapPrintFlags = new boolean[5];
+        this.heatmapPrintFlags = new boolean[6];
 
         this.cavFreqMap = new HashMap();
         this.conflicts = new LinkedList<>();
@@ -95,7 +96,8 @@ public class CableTree {
         if (this.heatmapPrintFlags[3])
             this.heats.addAll(computeChamberTripletAreas());
         //if (this.heatmapPrintFlags[4]) //Critical Distance
-        //if (this.heatmapPrintFlags[5]  //Direct successor
+        if (this.heatmapPrintFlags[5])  //Direct successor
+            this.heats.addAll(computeDirectSuccAreas());
 
         drawPane.getChildren().addAll(this.heats);
     }
@@ -122,6 +124,50 @@ public class CableTree {
 
     public ColorScheme getColorScheme() {
         return colorScheme;
+    }
+
+    public List<Shape> computeDirectSuccAreas(){
+        List<Shape> areas = new LinkedList<>();
+
+        for (Wire w : wires){
+            Cavity a = w.getCavities()[0];
+            Cavity b = w.getCavities()[1];
+
+            double distanceA = pythagorasDistance(a.getPos(), cableStore.getPos());
+            double distanceB = pythagorasDistance(b.getPos(), cableStore.getPos());
+            DirectSuccessorConstraint ds;
+
+            if (w.getLength() < distanceA){
+                ds = new DirectSuccessorConstraint(b, a, w, cableStore.getPos());
+
+                Shape moveArea = ds.getMoveArea();
+                moveArea.setOpacity(colorScheme.getHeatOpacity());
+                moveArea.setFill(colorScheme.getDirectColor());
+
+                Collection<Shape> arrows = ds.getArrows();
+                for (Shape s : arrows)
+                    s.setFill(colorScheme.getDirectColor());
+
+                areas.addAll(arrows);
+                areas.add(moveArea);
+            }
+            if (w.getLength() < distanceB){
+                ds = new DirectSuccessorConstraint(a, b, w, cableStore.getPos());
+
+                Shape moveArea = ds.getMoveArea();
+                moveArea.setOpacity(colorScheme.getHeatOpacity());
+                moveArea.setFill(colorScheme.getDirectColor());
+
+                Collection<Shape> arrows = ds.getArrows();
+                for (Shape s : arrows)
+                    s.setFill(colorScheme.getDirectColor());
+
+                areas.addAll(arrows);
+                areas.add(moveArea);
+            }
+
+        }
+        return areas;
     }
 
     public List<Shape> computeBlockingAreas(Palette p){
@@ -268,6 +314,7 @@ public class CableTree {
         TODO: compare with actual constraints in TechTool
         TODO: do NOT use Blocking and Diagonally Close but make two forms of CriticalDistanceCostraint
          */
+        /*
         for (Wire w : wires){
             Cavity a = w.getCavities()[0];
             Cavity b = w.getCavities()[1];
@@ -304,17 +351,25 @@ public class CableTree {
             }
         }
 
+         */
+
         //Direct Successor
         //TODO: adjust position of cable store so that it matches the constraints*
         for (Wire w : wires){
             Cavity a = w.getCavities()[0];
             Cavity b = w.getCavities()[1];
 
-            if (pythagorasDistance(a.getPos(), cableStore.getPos()) < w.getLength()){
-                constraints.add(new DirectSuccessorConstraint(b, a, w));
+            double distanceA = pythagorasDistance(a.getPos(), cableStore.getPos());
+            double distanceB = pythagorasDistance(b.getPos(), cableStore.getPos());
+            DirectSuccessorConstraint ds;
+
+            if (w.getLength() < distanceA){
+                ds = new DirectSuccessorConstraint(b, a, w, cableStore.getPos());
+                constraints.add(ds);
             }
-            if (pythagorasDistance(b.getPos(), cableStore.getPos()) < w.getLength()){
-                constraints.add(new DirectSuccessorConstraint(a, b, w));
+            if (w.getLength() < distanceB){
+                ds = new DirectSuccessorConstraint(a, b, w, cableStore.getPos());
+                constraints.add(ds);
             }
 
         }

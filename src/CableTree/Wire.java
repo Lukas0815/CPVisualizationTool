@@ -44,8 +44,8 @@ public class Wire {
 
     public Path getWireShape(){
 
-        Point2D pos1;
-        Point2D pos2;
+        Position pos1;
+        Position pos2;
 
         if (cavities[0].getPos().getY() > cavities[1].getPos().getY()){
             pos1 = cavities[0].getMiddlePoint();
@@ -55,7 +55,7 @@ public class Wire {
             pos2 = cavities[0].getMiddlePoint();
         }
 
-       return getWireShape(new Position(pos1.getX(), pos1.getY()), new Position(pos2.getX(), pos2.getY()));
+       return getWireShape(pos1, pos2);
     }
 
     public Path getWireShape(Position pos1, Position pos2){

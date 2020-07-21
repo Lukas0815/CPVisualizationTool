@@ -112,7 +112,7 @@ public class AddConstraintController {
                 constraint = new DiagonallyCloseConstraint(leftCav, rightCav, null);
                 break;
             case "Direct Successors Constraint":
-                constraint = new DirectSuccessorConstraint(leftCav, rightCav, null);
+                constraint = new DirectSuccessorConstraint(leftCav, rightCav, null, cableTree.getCableStore().getPos());
                 break;
             case "Short One-Sided Constraint":
                 constraint = new ShortOneSidedConstraint(leftCav, rightCav, null);

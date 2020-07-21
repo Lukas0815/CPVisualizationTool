@@ -184,8 +184,8 @@ public class Cavity {
         return new Rectangle(pos.getX(), pos.getY(), this.width, this.height);
     }
 
-    public Point2D getMiddlePoint() {
-        return new Point2D(this.pos.getX() + this.width/2, this.pos.getY() + this.height/2);
+    public Position getMiddlePoint() {
+        return new Position(this.pos.getX() + this.width/2, this.pos.getY() + this.height/2);
     }
 
     public Housing getHousing() {
